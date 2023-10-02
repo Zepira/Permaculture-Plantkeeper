@@ -1,19 +1,18 @@
 {
   "expo": {
     "name": "Plantkeeper",
-    "slug": "Plantkeeper",
+    "slug": "plantkeeper",
     "version": "1.0.0",
+    "scheme": "plantkeeper-scheme",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#5EBB91"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -25,6 +24,13 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "378c4de2-c930-4b5e-af3b-c75633b0e87d"
+      }
+    },
+    "owner": "zepira",
+    "plugins": ["expo-router"]
   }
 }
