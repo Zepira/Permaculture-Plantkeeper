@@ -4,16 +4,20 @@ import { FAB, IconButton, Portal } from "react-native-paper";
 import { colours } from "../theme/colours";
 import { theme } from "../theme";
 import { addGardenForm } from "../utils/constants/forms/addGardenForm";
+import { useRouter } from "expo-router";
 
 
-export const AddNewButton = ({ navigation }) => {
+export const AddNewButton = () => {
+
+    const router = useRouter();
 
     const [addPressed, setAddPressed] = useState(false);
-    const [state, setState] = React.useState({ open: false });
+    //const [state, setState] = React.useState({ open: false });
+    const [isOpen, setIsOpen] = useState(false);
 
-    const onStateChange = ({ open }) => setState({ open });
+    // const onStateChange = ({ open }) => setState({ open });
 
-    const { open } = state;
+    // const { open } = state;
 
     const styles = StyleSheet.create({
         fab: {
@@ -24,6 +28,8 @@ export const AddNewButton = ({ navigation }) => {
             borderRadius: 50
         },
     });
+
+    console.log('FAB', addGardenForm);
 
     return (
         <>
@@ -45,12 +51,12 @@ export const AddNewButton = ({ navigation }) => {
                     color="white"
                     onPress={() => console.log('Pressed')} /> */}
                 <FAB.Group
-                    open={open}
+                    open={isOpen}
                     visible
                     backdropColor='transparent'
                     fabStyle={styles.fab}
                     color="white"
-                    icon={open ? 'plus' : 'plus'}
+                    icon={isOpen ? 'plus' : 'plus'}
                     actions={[
                         {
                             icon: 'leaf',
@@ -64,12 +70,12 @@ export const AddNewButton = ({ navigation }) => {
                             style: {
                                 borderRadius: 50, marginRight: 15
                             },
-                            onPress: () => navigation.navigate('Form', { questions: addGardenForm, formType: 'addGarden' }),
+                            onPress: () => { setIsOpen(false); router.push({ pathname: '/form', params: { formType: 'addGarden' } }); }
                         }
                     ]}
-                    onStateChange={onStateChange}
+                    onStateChange={() => setIsOpen(!isOpen)}
                     onPress={() => {
-                        if (open) {
+                        if (isOpen) {
                             // do something if the speed dial is open
 
                         }

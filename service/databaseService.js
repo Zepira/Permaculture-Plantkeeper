@@ -1,6 +1,6 @@
 import { doc, setDoc, getDoc, getDocs, collection, query, where, addDoc } from 'firebase/firestore';
 import { useEffect } from "react";
-import { gardenType } from "../utils/constants/forms/constants";
+import { gardenType } from "../utils/constants/constants";
 
 const getUserData = async (db, userId) => {
     return getDoc(doc(db, 'users', userId));

@@ -1,19 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, View, Pressable, ScrollView, TouchableOpacity } from "react-native";
 import { FAB, IconButton, Portal, ProgressBar, Avatar, Button, Card } from "react-native-paper";
-import { SafeAreaWrapper } from "../safeAreaWrapper";
-import { gardenType } from "../../utils/constants/forms/constants";
-import { addGardenForm } from "../../utils/constants/forms/addGardenForm";
-import { colours } from "../../theme/colours";
-import { Text } from "../../theme/text";
-import { DataContext } from "../../utils/context/dataContext";
+import { SafeAreaWrapper } from "../components/safeAreaWrapper";
+import { addGardenForm, gardenType } from "../utils/constants/forms/addGardenForm";
+import { colours } from "../theme/colours";
+import { Text } from "../theme/text";
+import { DataContext } from "../utils/context/dataContext";
+import { router, useLocalSearchParams } from 'expo-router';
 
 
 
-export const FormComponent = ({ route, navigation }) => {
-    const { questions, formType } = route.params;
+export default Form = () => {
 
-    const formLength = questions.length
+    const { formType } = useLocalSearchParams();
+
+    const questions = addGardenForm;
+    const formLength = questions.length;
+
+
     //const [percentageComplete, setPercentageComplete] = useState(0);
     const [currentFormStage, setCurrentFormStage] = useState(0);
     const [formData, setFormData] = useState({});
@@ -50,7 +54,7 @@ export const FormComponent = ({ route, navigation }) => {
         switch (formType) {
             case 'addGarden': {
                 createNewGarden(formData).then((a) => {
-                    navigation.navigate('MyGarden');
+                    router.push('/myGarden');
                 })
 
                 break;

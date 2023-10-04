@@ -1,4 +1,4 @@
-import { gardenType } from "./constants";
+import { gardenType } from "../constants";
 
 export const addGardenForm = [
     {

@@ -19,7 +19,7 @@ export const LoadingComponent = () => {
                 style={{ height: 140, width: '100%' }}
                 key="animation"
                 ref={animation}
-                source={require('../../assets/loading_animation.json')}
+                source={require('../assets/loading_animation.json')}
             />
 
 
