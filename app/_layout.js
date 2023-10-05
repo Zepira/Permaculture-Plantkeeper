@@ -14,7 +14,6 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { AddNewButton } from "../components/addNewButton";
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
-
 const firebaseConfig = {
     apiKey: "AIzaSyDoc-ySKA5K9ZQhrEfpGN-3eKhjwFlASo8",
     authDomain: "plantkeeper-67879.firebaseapp.com",
@@ -53,7 +52,7 @@ const screenOptions = ({ route }) => {
 // const Tab = createBottomTabNavigator();
 
 
-export default function AppLayout() {
+export default function Layout() {
 
     const [isLoading, setIsLoading] = useState(true);
     return (
@@ -62,7 +61,8 @@ export default function AppLayout() {
             <AuthenticationContextProvider>
                 <DataContextProvider db={db} setIsLoading={setIsLoading}>
                     {isLoading && <LoadingComponent theme={paperTheme} />}
-                    <Tabs screenOptions={screenOptions}>
+                    {/* <Stack initialRouteName="home" /> */}
+                    <Tabs screenOptions={screenOptions} >
                         <Tabs.Screen
                             name="index"
                             options={{
@@ -70,7 +70,7 @@ export default function AppLayout() {
                                 href: '/',
                                 title: 'home'
                             }}
-                        />,
+                        />
                         <Tabs.Screen
                             name="myGarden"
                             options={{
@@ -78,7 +78,7 @@ export default function AppLayout() {
                                 href: '/myGarden',
 
                             }}
-                        />,
+                        />
                         <Tabs.Screen
                             name="form"
                             options={{
@@ -86,7 +86,34 @@ export default function AppLayout() {
                                 href: null,
 
                             }}
-                        />,
+                        />
+
+                        <Tabs.Screen
+                            name="addPlant"
+                            options={{
+                                // This tab will no longer show up in the tab bar.
+                                href: null,
+
+                            }}
+                        />
+
+                        <Tabs.Screen
+                            name="plantDetail"
+                            options={{
+                                // This tab will no longer show up in the tab bar.
+                                href: null,
+
+                            }}
+                        />
+                        <Tabs.Screen
+                            name="gardenDetail"
+                            options={{
+                                // This tab will no longer show up in the tab bar.
+                                href: null,
+
+                            }}
+                        />
+
 
                     </Tabs>
                     <AddNewButton />
@@ -95,5 +122,7 @@ export default function AppLayout() {
             </AuthenticationContextProvider>
             <StatusBar style="auto" />
         </PaperProvider>
+
     );
+
 }

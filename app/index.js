@@ -5,7 +5,7 @@ import { SafeAreaWrapperFullWidth } from "../components/safeAreaWrapper";
 import { View } from "react-native";
 import { AddNewButton } from "../components/addNewButton";
 
-export default Home = () => {
+export default function Home() {
 
     const { user } = useContext(DataContext);
     const [data, setData] = useState();

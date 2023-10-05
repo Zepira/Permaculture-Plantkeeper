@@ -29,7 +29,6 @@ export const AddNewButton = () => {
         },
     });
 
-    console.log('FAB', addGardenForm);
 
     return (
         <>
@@ -62,7 +61,7 @@ export const AddNewButton = () => {
                             icon: 'leaf',
                             label: 'Add Plant',
                             style: { borderRadius: 50, marginRight: 15, },
-                            onPress: () => console.log('Pressed email'),
+                            onPress: () => router.push({ pathname: '/addPlant' })
                         },
                         {
                             icon: 'barley',
@@ -70,7 +69,7 @@ export const AddNewButton = () => {
                             style: {
                                 borderRadius: 50, marginRight: 15
                             },
-                            onPress: () => { setIsOpen(false); router.push({ pathname: '/form', params: { formType: 'addGarden' } }); }
+                            onPress: () => router.push({ pathname: '/form', params: { formType: 'addGarden' } })
                         }
                     ]}
                     onStateChange={() => setIsOpen(!isOpen)}

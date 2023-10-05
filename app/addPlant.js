@@ -3,12 +3,12 @@ import { Text } from "../theme/text";
 import { DataContext } from "../utils/context/dataContext";
 import { SafeAreaWrapperFullWidth } from "../components/safeAreaWrapper";
 import { TouchableOpacity, View } from "react-native";
-import { gardenType } from "../utils/constants/constants";
+import { Avatar } from "react-native-paper";
 import { router } from "expo-router";
 
-export default MyGarden = () => {
+export default AddPlant = () => {
 
-    const { user, userGardens } = useContext(DataContext);
+    const { plants } = useContext(DataContext);
     const [data, setData] = useState();
 
 
@@ -21,18 +21,15 @@ export default MyGarden = () => {
     return (
         <>
             <SafeAreaWrapperFullWidth>
+                <Text>Browse for plants</Text>
 
-                {userGardens.map((garden) =>
-                    <TouchableOpacity onPress={() => router.push({ pathname: '/gardenDetail', params: garden })} key={garden.id} style={{
+                {plants && plants.map((plant) =>
+
+                    <TouchableOpacity onPress={() => router.push({ pathname: '/plantDetail', params: plant })} key={plant.id} style={{
                         height: 80, borderColor: 'black', borderWidth: 1, marginTop: 20, borderRadius: 20, flex: 1, justifyContent: 'center', paddingLeft: 20
                     }}>
-
-                        <Text variant='smallHeading'>{gardenType[garden.gardenType].optionText}</Text>
-
-
-
-
-
+                        <Avatar.Image size={60} source={{ uri: plant.images[0] }} />
+                        <Text variant='smallHeading'>{plant.plantName}</Text>
 
                     </TouchableOpacity>
                 )}

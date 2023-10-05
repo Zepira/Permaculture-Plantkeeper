@@ -1,7 +1,7 @@
 
 import React, { useState, createContext, useEffect, useContext } from 'react';
 import { getFirestore, collection, getDocs, doc, getDoc, query, setDoc } from "firebase/firestore";
-import { getUserData, createGarden, getUserGardens } from "../../service/databaseService";
+import { getUserData, createGarden, getUserGardens, getPlantData, createUserPlant } from "../../service/databaseService";
 import { AuthenticationContext } from "./authenticationContext";
 
 
@@ -9,7 +9,7 @@ export const DataContext = createContext();
 
 export const DataContextProvider = ({ db, children, setIsLoading }) => {
 
-    const [plants, setUserPlants] = useState(null);
+    const [plants, setPlants] = useState(null);
     const [user, setUser] = useState(null);
     const [userGardens, setUserGardens] = useState([]);
 
@@ -23,6 +23,7 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
             setIsLoading(false);
         });
         getAllUserGardens();
+        getAllPlants();
     }, [])
 
 
@@ -38,8 +39,26 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
 
     const getAllUserGardens = () => {
         getUserGardens(db, userId).then((gardens) => {
-            console.log(gardens);
             setUserGardens(gardens);
+        }).catch((er) => {
+            console.log(er);
+            return er;
+        })
+    }
+
+    const getAllPlants = () => {
+        getPlantData(db).then((plants) => {
+            setPlants(plants);
+        }).catch((er) => {
+            console.log(er);
+            return er;
+        })
+    }
+
+    const createNewPlant = async (newPlant) => {
+        createUserPlant(db, newPlant, userId).then((plant) => {
+            getAllPlants();
+            return plant;
         }).catch((er) => {
             console.log(er);
             return er;
@@ -49,10 +68,14 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
     return (
         <DataContext.Provider
             value={{
+                db,
                 createNewGarden,
                 getAllUserGardens,
                 userGardens,
-                user
+                user,
+                getAllPlants,
+                plants,
+                createNewPlant
             }}>
             {children}
         </DataContext.Provider>
