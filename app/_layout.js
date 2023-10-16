@@ -29,9 +29,9 @@ const db = getFirestore(app);
 
 const TAB_ICON = {
     index: 'home',
-    myGarden: 'leaf',
+    gardens: 'leaf',
     Search: 'search',
-    Plant: 'leaf',
+    plants: 'leaf',
     Camera: 'camera'
 };
 
@@ -46,6 +46,7 @@ const screenOptions = ({ route }) => {
         tabBarIcon: ({ size, color, focused }) => <View style={{ backgroundColor: focused ? 'white' : 'white', padding: 9, borderRadius: 100 }}><Ionicons name={iconName} size={size} color={color} /></View>,
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'grey',
+        style: { zIndex: 1000 }
     }
 }
 
@@ -68,14 +69,24 @@ export default function Layout() {
                             options={{
                                 // This tab will no longer show up in the tab bar.
                                 href: '/',
-                                title: 'home'
+                                title: 'Home'
                             }}
                         />
                         <Tabs.Screen
-                            name="myGarden"
+                            name="gardens"
                             options={{
                                 // This tab will no longer show up in the tab bar.
-                                href: '/myGarden',
+                                href: '/gardens',
+                                title: 'My Garden'
+
+                            }}
+                        />
+                        <Tabs.Screen
+                            name="plants"
+                            options={{
+                                // This tab will no longer show up in the tab bar.
+                                href: '/plants',
+                                title: 'Plants'
 
                             }}
                         />
@@ -89,7 +100,7 @@ export default function Layout() {
                         />
 
                         <Tabs.Screen
-                            name="addPlant"
+                            name="(plants)/[plantId]"
                             options={{
                                 // This tab will no longer show up in the tab bar.
                                 href: null,
@@ -97,22 +108,9 @@ export default function Layout() {
                             }}
                         />
 
-                        <Tabs.Screen
-                            name="plantDetail"
-                            options={{
-                                // This tab will no longer show up in the tab bar.
-                                href: null,
 
-                            }}
-                        />
-                        <Tabs.Screen
-                            name="gardenDetail"
-                            options={{
-                                // This tab will no longer show up in the tab bar.
-                                href: null,
 
-                            }}
-                        />
+
 
 
                     </Tabs>

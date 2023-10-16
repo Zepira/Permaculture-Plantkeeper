@@ -61,7 +61,7 @@ export const AddNewButton = () => {
                             icon: 'leaf',
                             label: 'Add Plant',
                             style: { borderRadius: 50, marginRight: 15, },
-                            onPress: () => router.push({ pathname: '/addPlant' })
+                            onPress: () => router.push({ pathname: '/plants' })
                         },
                         {
                             icon: 'barley',

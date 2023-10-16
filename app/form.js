@@ -13,7 +13,7 @@ import { addPlantForm } from "../utils/constants/forms/addPlantForm";
 
 export default Form = () => {
 
-    const { formType, id } = useGlobalSearchParams();
+    const { formType, id, variety } = useLocalSearchParams();
     const { userGardens } = useContext(DataContext);
 
 
@@ -24,7 +24,7 @@ export default Form = () => {
     const [questions, setQuestions] = useState([]);
     const [formLength, setFormLength] = useState(0);
 
-
+    console.log('variety', formType, id, variety);
     const { createNewGarden, createNewPlant } = useContext(DataContext);
 
     useEffect(() => {
@@ -80,7 +80,7 @@ export default Form = () => {
             }
             case 'addPlant': {
                 formData.plantId = id;
-                createNewPlant(formData).then((a) => {
+                createNewPlant(formData, variety).then((a) => {
                     router.push('/myGarden');
                 });
                 break;
@@ -99,7 +99,7 @@ export default Form = () => {
                 <ScrollView>
                     {formLength > 0 && questions[currentFormStage].options.map((option) =>
 
-                        <TouchableOpacity onPress={() => progressForm(option.optionMapping ? option.optionMapping : option.id)} key={option.optionMapping ? option.optionMapping : option.id} style={{
+                        <TouchableOpacity onPress={() => progressForm(option.optionMapping ? option.optionMapping : option.id)} key={option.id ? option.id : option.optionMapping} style={{
                             height: 80, borderColor: 'black', borderWidth: 1, marginTop: 20, borderRadius: 20, flex: 1, justifyContent: 'center', paddingLeft: 20
                         }}>
 

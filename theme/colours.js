@@ -67,5 +67,6 @@ export const colours = {
         error: '#D0421B',
         success: '#138000',
     },
+    transparent: 'rgba(255,255,255,1)'
 };
 

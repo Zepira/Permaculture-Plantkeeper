@@ -1,4 +1,4 @@
-import { gardenType } from "../constants";
+import { gardenType, lighting } from "../constants";
 
 export const addGardenForm = [
     {
@@ -14,25 +14,7 @@ export const addGardenForm = [
         databaseValue: 'lighting',
         questionSubText: '',
         questionType: 'radioGroup',
-        options: [{
-            optionText: 'Dark',
-            optionMapping: 1,
-            optionDetail: '0 hours of sunlight, such as a windowless room'
-        }, {
-            optionText: 'Shade',
-            optionMapping: 2,
-            optionDetail: 'Far away from a window, or with a lot of sunlight blocked'
-        },
-        {
-            optionText: 'Part sun, part shade',
-            optionMapping: 3,
-            optionDetail: 'Dappled sun throught the day'
-        },
-        {
-            optionText: 'Full sun',
-            optionMapping: 4,
-            optionDetail: 'At least 8h of full sun'
-        }]
+        options: lighting
     }
     // {
     //     index: 1,

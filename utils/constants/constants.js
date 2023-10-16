@@ -59,3 +59,26 @@ export const gardenType = [
         optionDetail: 'Anywhere protected that you can raise seedlings',
         defaultImage: 'https://firebasestorage.googleapis.com/v0/b/plantapp-ca700.appspot.com/o/images%2Fgarden-bed.jpg?alt=media&token=b23933bb-e3f7-43e1-87bf-d1a7a223246d'
     }];
+
+
+export const lighting = [
+    {
+        optionText: 'Dark',
+        optionMapping: 1,
+        optionDetail: '0 hours of sunlight, such as a windowless room'
+    }, {
+        optionText: 'Shade',
+        optionMapping: 2,
+        optionDetail: 'Far away from a window, or with a lot of sunlight blocked'
+    },
+    {
+        optionText: 'Part sun, part shade',
+        optionMapping: 3,
+        optionDetail: 'Dappled sun throught the day'
+    },
+    {
+        optionText: 'Full sun',
+        optionMapping: 4,
+        optionDetail: 'At least 8h of full sun'
+    }
+];
