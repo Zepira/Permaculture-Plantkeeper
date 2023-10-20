@@ -22,7 +22,7 @@ export default GardenDetail = () => {
         if (garden.id) {
             setPlants(null);
             getGardenPlants(db, garden.id).then((plantData) => {
-                console.log('VARIETYIES', plantData[0].variety);
+
                 setPlants(plantData);
             }).catch((er) => { console.log(er) })
                 .finally((asd) => {
@@ -37,12 +37,12 @@ export default GardenDetail = () => {
                 <Button onPress={() => router.back()}>Back</Button>
                 <Text variant='smallHeading'>{garden && gardenType[garden.gardenType].optionText}</Text>
                 {plants && plants.map((plant, index) =>
-                    <TouchableOpacity onPress={() => router.push({ pathname: '/(plants)/' + plant.plantId, params: { origin: 'garden' } })} key={index} style={{
-                        height: 80, borderColor: 'black', borderWidth: 1, marginTop: 20, borderRadius: 20, justifyContent: 'center', paddingLeft: 20
+                    <TouchableOpacity onPress={() => router.push({ pathname: '/(plants)/' + plant.id, params: { origin: 'garden' } })} key={index} style={{
+                        borderColor: 'black', borderWidth: 1, marginTop: 20, borderRadius: 20, justifyContent: 'center', padding: 20
                     }}>
-                        <Avatar.Image size={60} source={{ uri: plant.variety ? plant.variety.images[0] : plant.images[0] }} />
+                        <Avatar.Image size={60} source={{ uri: plant?.variety ? plant.variety.images[0] : plant.images[0] }} />
                         <Text variant='smallHeading'>{plant.plantName}</Text>
-                        <Avatar.Image size={60} source={{ uri: 'aaa' }} />
+
 
                     </TouchableOpacity>)}
 

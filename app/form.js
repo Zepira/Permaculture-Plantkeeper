@@ -60,7 +60,6 @@ export default Form = () => {
     }, [formData]);
 
     const progressForm = (updatedValue) => {
-
         setFormData({ ...formData, [questions[currentFormStage].databaseValue]: updatedValue });
         if (currentFormStage + 1 === formLength) {
             setFormComplete(true);
@@ -74,14 +73,15 @@ export default Form = () => {
         switch (formType) {
             case 'addGarden': {
                 createNewGarden(formData).then((a) => {
-                    router.push('/myGarden');
+                    router.push('/gardens');
                 });
                 break;
             }
             case 'addPlant': {
                 formData.plantId = id;
+                console.log('formData', formData);
                 createNewPlant(formData, variety).then((a) => {
-                    router.push('/myGarden');
+                    router.push('/gardens');
                 });
                 break;
             }

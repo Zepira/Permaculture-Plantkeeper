@@ -1,7 +1,7 @@
 
 import React, { useState, createContext, useEffect, useContext } from 'react';
 import { getFirestore, collection, getDocs, doc, getDoc, query, setDoc } from "firebase/firestore";
-import { getUserData, createGarden, getUserGardens, getPlantData, createUserPlant, updateUserFavourites, getUserPlants } from "../../service/databaseService";
+import { getUserData, createGarden, getUserGardens, getPlantData, createUserPlant, updateUserFavourites, getUserPlants, updateUserPlant } from "../../service/databaseService";
 import { AuthenticationContext } from "./authenticationContext";
 
 
@@ -34,6 +34,15 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
             setUser(userData.data());
             setIsLoading(false);
         });
+    }
+
+    const updateUserPlantData = (updatedPlant) => {
+        console.log('updateUserPlantData', updatedPlant)
+        updateUserPlant(db, updatedPlant).then((plant) => {
+            return;
+        }).catch((e) => {
+            console.log(e);
+        })
     }
 
 
@@ -94,6 +103,7 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
     }
 
     const createNewPlant = async (newPlant, variety) => {
+        console.log('newPlant', newPlant)
         createUserPlant(db, newPlant, variety, userId).then((plant) => {
             getAllPlants();
             getAllUserPlants();
@@ -117,7 +127,8 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
                 createNewPlant,
                 updateUserFavourite,
                 getAllUserPlants,
-                userPlants
+                userPlants,
+                updateUserPlantData
             }}>
             {children}
         </DataContext.Provider>

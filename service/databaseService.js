@@ -15,6 +15,11 @@ const getUserPlants = async (db, userId) => {
     })
 }
 
+const updateUserPlant = async (db, updatedPlant) => {
+    console.log('updateUserPlant', updatedPlant);
+    return updateDoc(doc(db, 'userPlants', updatedPlant.id), updatedPlant);
+}
+
 const updateUserFavourites = (db, userId, updatedFavourites) => {
     console.log(updatedFavourites);
     return updateDoc(doc(db, 'users', userId), {
@@ -50,6 +55,7 @@ const getUserGardens = async (db, userId) => {
 const createUserPlant = async (db, newPlant, variety, userId) => {
     console.log('createUserPlant', newPlant, variety);
     newPlant.user = userId;
+    newPlant.plantedDate = new Date();
     try {
         if (variety) {
             const plantDetails = await getDoc(doc(db, 'plants', newPlant.plantId));
@@ -74,7 +80,8 @@ const getGardenPlants = async (db, gardenId) => {
 
     async function getGardenPlants() {
         const gardenPlants = await getDocs(query(collection(db, 'userPlants'), where('gardenId', '==', gardenId)));
-        return gardenPlants.docs;
+        const docs = gardenPlants.docs.map((f) => ({ ...f.data(), ...{ id: f.id } }));
+        return docs;
     }
 
     async function getPlantDetail(plantId) {
@@ -83,11 +90,13 @@ const getGardenPlants = async (db, gardenId) => {
     }
 
     async function runAsyncFunctions() {
+
         const gardenPlantData = await getGardenPlants();
+        console.log('hasdasd', gardenPlantData);
         const updatedGardenPlantData = [];
 
         for (let i = 0; i < gardenPlantData.length; i++) {
-            const gardenPlant = gardenPlantData[i].data()
+            const gardenPlant = gardenPlantData[i];
             const result = await getPlantDetail(gardenPlant.plantId);
             updatedGardenPlantData.push({ ...gardenPlant, ...result.data() });
         }
@@ -110,4 +119,4 @@ const getGardenPlants = async (db, gardenId) => {
 
 
 
-export { getUserData, getPlantData, createGarden, getUserGardens, createUserPlant, getGardenPlants, updateUserFavourites, getUserPlants };
+export { getUserData, getPlantData, createGarden, getUserGardens, createUserPlant, getGardenPlants, updateUserFavourites, getUserPlants, updateUserPlant };

@@ -27,7 +27,7 @@ export default MyGarden = () => {
                 <ScrollView>
                     {userGardens.map((garden) =>
                         <TouchableOpacity onPress={() => router.push('/gardens/' + garden.id)} key={garden.id} style={{
-                            height: 80, borderColor: 'black', borderWidth: 1, marginTop: 20, borderRadius: 20, flex: 1, justifyContent: 'center', paddingLeft: 20
+                            borderColor: 'black', borderWidth: 1, marginTop: 20, borderRadius: 20, flex: 1, justifyContent: 'center', padding: 20
                         }}>
                             <Avatar.Image size={60} source={{ uri: gardenType[garden.gardenType].defaultImage }} />
                             <Text variant='smallHeading'>{gardenType[garden.gardenType].optionText}</Text>
