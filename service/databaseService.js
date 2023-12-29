@@ -52,6 +52,15 @@ const getUserGardens = async (db, userId) => {
     })
 }
 
+const updateUserGarden = async (db, updatedGarden) => {
+    console.log('updateUserGarden in db Service', updatedGarden);
+    try {
+        return updateDoc(doc(db, 'userGardens', updatedGarden.id), updatedGarden);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 const createUserPlant = async (db, newPlant, variety, userId) => {
     console.log('createUserPlant', newPlant, variety);
     newPlant.user = userId;
@@ -92,7 +101,7 @@ const getGardenPlants = async (db, gardenId) => {
     async function runAsyncFunctions() {
 
         const gardenPlantData = await getGardenPlants();
-        console.log('hasdasd', gardenPlantData);
+
         const updatedGardenPlantData = [];
 
         for (let i = 0; i < gardenPlantData.length; i++) {
@@ -119,4 +128,4 @@ const getGardenPlants = async (db, gardenId) => {
 
 
 
-export { getUserData, getPlantData, createGarden, getUserGardens, createUserPlant, getGardenPlants, updateUserFavourites, getUserPlants, updateUserPlant };
+export { getUserData, getPlantData, createGarden, getUserGardens, createUserPlant, getGardenPlants, updateUserFavourites, getUserPlants, updateUserPlant, updateUserGarden };

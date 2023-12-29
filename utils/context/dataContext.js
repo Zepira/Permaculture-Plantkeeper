@@ -1,7 +1,7 @@
 
 import React, { useState, createContext, useEffect, useContext } from 'react';
 import { getFirestore, collection, getDocs, doc, getDoc, query, setDoc } from "firebase/firestore";
-import { getUserData, createGarden, getUserGardens, getPlantData, createUserPlant, updateUserFavourites, getUserPlants, updateUserPlant } from "../../service/databaseService";
+import { getUserData, createGarden, getUserGardens, getPlantData, createUserPlant, updateUserFavourites, getUserPlants, updateUserPlant, updateUserGarden } from "../../service/databaseService";
 import { AuthenticationContext } from "./authenticationContext";
 
 
@@ -114,6 +114,17 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
         })
     }
 
+    const updateGarden = (updatedGarden) => {
+
+        updateUserGarden(db, updatedGarden).then(() => {
+            getAllUserGardens();
+            return;
+        }).catch((e) => {
+            console.log(e);
+        })
+
+    }
+
     return (
         <DataContext.Provider
             value={{
@@ -128,7 +139,8 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
                 updateUserFavourite,
                 getAllUserPlants,
                 userPlants,
-                updateUserPlantData
+                updateUserPlantData,
+                updateGarden
             }}>
             {children}
         </DataContext.Provider>

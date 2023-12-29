@@ -11,7 +11,7 @@ import { DataContextProvider } from "../utils/context/dataContext";
 import { LoadingComponent } from "../components/loadingComponent";
 import { Tabs } from 'expo-router/tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { AddNewButton } from "../components/addNewButton";
+import { AddNewButton } from "../components/buttons/addNewButton";
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 const firebaseConfig = {

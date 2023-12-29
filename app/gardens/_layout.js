@@ -13,6 +13,6 @@ const screenOptions = () => {
     }
 }
 
-export default PlantsLayout = () => {
+export default GardenLayout = () => {
     return (<Stack screenOptions={screenOptions} />);
 };

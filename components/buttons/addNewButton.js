@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { FAB, IconButton, Portal } from "react-native-paper";
-import { colours } from "../theme/colours";
-import { theme } from "../theme";
-import { addGardenForm } from "../utils/constants/forms/addGardenForm";
+import { colours } from "../../theme/colours";
+import { theme } from "../../theme";
+import { addGardenForm } from "../../utils/constants/forms/addGardenForm";
 import { useRouter } from "expo-router";
 
 

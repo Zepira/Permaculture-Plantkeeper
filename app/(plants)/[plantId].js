@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Text } from "../../theme/text";
 import { DataContext } from "../../utils/context/dataContext";
 import { SafeAreaWrapperFullWidth } from "../../components/safeAreaWrapper";
@@ -9,83 +9,118 @@ import { router, useLocalSearchParams } from "expo-router";
 import { icons } from "../../utils/constants/assets"
 import { colours } from "../../theme/colours";
 import { titleCase } from "../../utils/utils";
+import { CircularProgressIndicator } from "../../components/circularProgressIndicator";
+import { useFocusEffect } from "@react-navigation/native";
+import { LoadingComponent } from "../../components/loadingComponent";
+import { TopActionButton, TopActionButtonContainer } from "../../components/buttons/topActionButton";
 
-export default AddPlant = () => {
+export default PlantDetail = () => {
 
     const params = useLocalSearchParams();
+    console.log(params);
 
     const { plants, userPlants, updateUserFavourite, user, updateUserPlantData } = useContext(DataContext);
 
     const [plant, setPlant] = useState(null);
     const [userPlant, setUserPlant] = useState(null);
     const [isUserPlant, setIsUserPlant] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [variety, setVariety] = useState(null);
     const [isFavourite, setIsFavourite] = useState(null);
     const [daysSincePlanted, setDaysSincePlanted] = useState(0);
-    const [daysSinceWatered, setDaysSinceWatered] = useState(0);
-    const [daysSinceFertilised, setDaysSinceFertilised] = useState(0);
-    const [daysSinceWeeded, setDaysSinceWeeded] = useState(0);
+    const [daysTillNextPlantStage, setDaysTillNextPlantStage] = useState(null);
+    const [daysToWaterIn, setDaysToWaterIn] = useState(0);
+    const [daysToFertiliseIn, setDaysToFertiliseIn] = useState(0);
+    const [daysToWeedIn, setDaysToWeedIn] = useState(0);
+    const [growthStageIcon, setGrowthStageIcon] = useState(null);
     const today = new Date();
 
-    useEffect(() => {
-        const originalUserPlant = userPlants !== null ? userPlants.find((plant) => plant.id === params.plantId) : null;
-        setUserPlant(originalUserPlant)
-        if (originalUserPlant) {
-            setPlant({ ...plants.find((plant) => plant.id === originalUserPlant.plantId), ...originalUserPlant });
-            setIsUserPlant(true);
-            setVariety(originalUserPlant?.variety ? originalUserPlant.variety : null);
-            setDaysSincePlanted(Math.round(Math.abs((today - originalUserPlant.plantedDate.toDate()) / (1000 * 60 * 60 * 24))));
+    const waterFrequency = 3;
+    const fertilisingFrequency = 30;
+    const weedingFrequency = 60;
 
-            const waterFrequency = 3;
-            const daysSinceWatered = originalUserPlant.lastWateredDate ? Math.round(Math.abs((today - originalUserPlant.lastWateredDate.toDate()) / (1000 * 60 * 60 * 24))) : null;
-            setDaysSinceWatered(daysSinceWatered != null ? waterFrequency - daysSinceWatered : 0);
+    const calculateDaysUntilActionDue = (lastActionDate, frequency) => {
 
-            // const fertilisingFrequency = 30
-            // const daysFertilised = plant.lastFertilisedDate ? Math.round(Math.abs((today - userPlant.lastWateredDate.toDate()) / (1000 * 60 * 60 * 24))) : null;
-            // setDaysSinceFertilised(daysFertilised != null ? fertilisingFrequency - daysFertilised : 0);
+        if (lastActionDate) {
+            const daysSinceAction = Math.round(Math.abs((today - lastActionDate.toDate()) / (1000 * 60 * 60 * 24)));
+            console.log('daysSinceAction', daysSinceAction);
 
-            // const weedingFrequency = 60
-            // const daysSinceWeeded = plant.lastWeededDate ? Math.round(Math.abs((today - userPlant.lastWateredDate.toDate()) / (1000 * 60 * 60 * 24))) : null;
-            // setDaysSinceWeeded(daysSinceWeeded != null ? weedingFrequency - daysSinceWeeded : 0);
-        }
-        else {
-            const plant = plants.find((plant) => plant.id === params.plantId);
-            setPlant(plant);
-            setIsUserPlant(false);
-            setVariety(null);
-            setIsFavourite(user.plantFavourites.includes(params.plantId));
+            return daysSinceAction > frequency ? 0 : frequency - daysSinceAction;
+        } else {
+            return 0;
         }
 
+    };
 
-    }, [params.plantId]);
+    useFocusEffect(
 
-    useEffect(() => {
-        if (plant) {
+        useCallback(() => {
+
+            setIsLoading(true);
 
 
-        }
-    }, [plant]);
+            if (userPlants, plants) {
+                const originalUserPlant = userPlants !== null ? userPlants.find((plant) => plant.id === params.plantId) : null;
+                if (originalUserPlant) {
+
+                    setUserPlant(originalUserPlant);
+                    const plantDetail = plants.find((plant) => plant.id === originalUserPlant.plantId);
+                    setPlant({ ...plantDetail, ...originalUserPlant });
+                    setIsUserPlant(true);
+                    setVariety(originalUserPlant?.variety ? originalUserPlant.variety : null);
+                    const daysSincePlantedDate = Math.round(Math.abs((today - originalUserPlant.plantedDate.toDate()) / (1000 * 60 * 60 * 24)))
+                    setDaysSincePlanted(daysSincePlantedDate);
+
+                    switch (originalUserPlant.growthStage) {
+                        case 1: setGrowthStageIcon('seed'); setDaysTillNextPlantStage(plantDetail.daysToSprout); console.log('seed sprouts in ', plantDetail.daysToSprout, 'days since planted: ', Math.round(Math.abs((today - originalUserPlant.plantedDate.toDate()) / (1000 * 60 * 60 * 24)))); break;
+                        case 2: setGrowthStageIcon('sprout'); setDaysTillNextPlantStage(plantDetail.sproutToHarvest); console.log('sprout ready to harvest in ', plantDetail.sproutToHarvest, 'days since planted: ', Math.round(Math.abs((today - originalUserPlant.plantedDate.toDate()) / (1000 * 60 * 60 * 24)))); break;
+                        case 3: setGrowthStageIcon('flower-tulip'); setDaysTillNextPlantStage(0); break;
+                        default: setGrowthStageIcon('sprout'); setDaysTillNextPlantStage(0); break;
+                    }
+
+
+
+                    const daysSinceLastWatered = calculateDaysUntilActionDue(originalUserPlant.lastWateredDate, waterFrequency);
+                    setDaysToWaterIn(daysSinceLastWatered);
+
+                    const daysSinceLastFertilised = calculateDaysUntilActionDue(originalUserPlant.lastFertilisedDate, fertilisingFrequency);
+                    setDaysToFertiliseIn(daysSinceLastFertilised);
+
+                    const daysSinceLastWeeded = calculateDaysUntilActionDue(originalUserPlant.lastWeededDate, weedingFrequency);
+                    setDaysToWeedIn(daysSinceLastWeeded);
+                    setIsLoading(false);
+                }
+                else {
+                    const plant = plants.find((plant) => plant.id === params.plantId);
+                    setPlant(plant);
+                    setIsUserPlant(false);
+                    setVariety(null);
+                    setIsFavourite(user.plantFavourites.includes(params.plantId));
+                    setIsLoading(false);
+                }
+
+            } else {
+                setIsLoading(true);
+            }
+
+        }, [plants, userPlants, params, waterFrequency])
+
+    );
 
     const updatePlantAction = (actionType) => {
-        const waterFrequency = 3;
-        const fertilisingFrequency = 30
-        const weedingFrequency = 60;
-        console.log('ALANA', actionType);
 
         switch (actionType) {
             case 'water':
-                const asdas = { ...userPlant, lastWateredDate: today };
-                console.log('ALANA', asdas);
-                updateUserPlantData(asdas)
-                setDaysSinceWatered(waterFrequency);
+                updateUserPlantData({ ...userPlant, lastWateredDate: today });
+                setDaysToWaterIn(waterFrequency);
                 break;
             case 'fertilise':
-                updateUserPlantData({ ...userPlant, ...userPlant.lastFertilisedDate = today });
-                setDaysSinceFertilised(fertilisingFrequency);
+                updateUserPlantData({ ...userPlant, lastFertilisedDate: today });
+                setDaysToFertiliseIn(fertilisingFrequency);
                 break;
             case 'weed':
-                updateUserPlantData({ ...userPlant, ...userPlant.lastWeededDate = today });
-                setDaysSinceWeeded(weedingFrequency);
+                updateUserPlantData({ ...userPlant, lastWeededDate: today });
+                setDaysToWeedIn(weedingFrequency);
                 break;
             default:
                 break;
@@ -102,26 +137,24 @@ export default AddPlant = () => {
     }
 
 
-    const PlantDetailIcon = ({ iconType, displayText, value }) => {
+    // const PlantDetailIcon = ({ iconType, displayText, value }) => {
 
-        return (
-            <View style={{ alignContent: 'center', alignItems: 'center' }}>
-                <View style={{ borderColor: 'black', borderWidth: 1, borderRadius: 150, height: 80, width: 80, padding: 10, backgroundColor: colours.primary }}>
-                    {iconType ? <Image source={icons[iconType]} style={{
-                        flex: 1,
-                        width: null,
-                        height: null,
-                        resizeMode: 'contain'
-                    }} /> :
-                        <Text style={{ fontSize: 50, fontWeight: 200, alignSelf: 'center' }}>{value}</Text>
-                    }
-                </View>
-                <Text>{displayText ? displayText : titleCase(iconType)}</Text>
-            </View>
-        );
-    }
-
-
+    //     return (
+    //         <View style={{ alignContent: 'center', alignItems: 'center' }}>
+    //             <View style={{ borderColor: 'black', borderWidth: 1, borderRadius: 150, height: 80, width: 80, padding: 10, backgroundColor: colours.primary }}>
+    //                 {iconType ? <Image source={icons[iconType]} style={{
+    //                     flex: 1,
+    //                     width: null,
+    //                     height: null,
+    //                     resizeMode: 'contain'
+    //                 }} /> :
+    //                     <Text style={{ fontSize: 50, fontWeight: 200, alignSelf: 'center' }}>{value}</Text>
+    //                 }
+    //             </View>
+    //             <Text>{displayText ? displayText : titleCase(iconType)}</Text>
+    //         </View>
+    //     );
+    // }
 
     const PlantingCalendar = ({ plantSowingDates }) => {
 
@@ -129,10 +162,6 @@ export default AddPlant = () => {
 
             let monthArray = [];
             let sowingDates = plantSowingDates.find(x => x.climateZone === 4).sowingDates;
-            //let sowingDates = plantSowingDates.find(x => x.climateZone === userData.climateZone).sowingDates;
-
-
-
 
             Array.from({ length: 12 }, (_, k) => {
                 let isMidMonth = false;
@@ -141,7 +170,6 @@ export default AddPlant = () => {
 
                 sowingDates.forEach((sowingDate) => {
 
-                    const date = new Date();
                     const sowingMonth = sowingDate.toDate().getMonth();
 
                     // if (date.getMonth() === sowingMonth && !isSowableNow) {
@@ -152,9 +180,6 @@ export default AddPlant = () => {
                         isMidMonth = true;
                     }
                 });
-
-
-
 
                 monthArray.push({
                     monthKey: k,
@@ -227,61 +252,75 @@ export default AddPlant = () => {
 
     return (
         <>
-            {plant && <ImageBackground source={{ uri: variety ? variety.images[0] : plant.images[0] }} style={{ height: 300, resizeMode: 'cover', width: '100%' }} >
-                <Button onPress={() => isUserPlant ? router.replace('/gardens/' + plant.gardenId) : router.replace('/plants')}>Back</Button>
+            {isLoading ? <LoadingComponent /> : <>
+                {plant && <ImageBackground source={{ uri: variety ? variety.images[0] : plant.images[0] }} style={{ height: 300, resizeMode: 'cover', width: '100%' }} >
+                    <TopActionButtonContainer>
+                        <TopActionButton onPressAction={() => isUserPlant ? router.replace('/gardens/' + userPlant.gardenId) : router.replace('/plants')} icon="arrow-left" />
 
-            </ImageBackground>
-            }
-            {plant &&
-                <SafeAreaWrapperFullWidth>
-                    {plant.plantName && <>
 
-                        <Text style={{ color: 'black' }}>{plant.plantName}</Text>
-                        <Text style={{ color: 'black' }}>{plant.scientificName}</Text>
-                        {isUserPlant && <><Text style={{ color: 'black' }}>It's a user plant!</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <TopActionButton onPressAction={() => isUserPlant ? router.replace('/gardens/' + userPlant.gardenId) : router.replace('/plants')} icon="cog" />
+                    </TopActionButtonContainer>
+
+
+                </ImageBackground>
+                }
+                {plant &&
+                    <SafeAreaWrapperFullWidth style={{ padding: 20 }}>
+                        {plant.plantName && <>
+
+                            <Text style={{ color: 'black' }}>{plant.plantName}</Text>
+                            <Text style={{ color: 'black' }}>{plant.scientificName}</Text>
+                            <Text style={{ color: 'black' }}>{plant.plantName}</Text>
+                            {/* Totally great icons and stuff */}
+                            {isUserPlant && <>
+                                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <PlantDetailIcon displayText='Days to Sprout' value={plant.daysToSprout - daysSincePlanted} />
                                 <PlantDetailIcon displayText='Days to Transplant' value={(6 * 7) - daysSincePlanted} />
                                 <PlantDetailIcon displayText='Mature in' value={plant.sproutToHarvest + plant.daysToSprout - daysSincePlanted} />
-                            </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <TouchableOpacity onPress={() => updatePlantAction('water')}>
-                                    <PlantDetailIcon displayText='Water in' value={daysSinceWatered} />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => updatePlantAction('fertilise')}>
-                                    <PlantDetailIcon displayText='Fert in' value={daysSinceFertilised} />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => updatePlantAction('weed')}>
-                                    <PlantDetailIcon displayText='Weed in' value={daysSinceWeeded} />
-                                </TouchableOpacity>
+                            </View> */}
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <TouchableOpacity onPress={() => updatePlantAction('water')}>
+                                        <CircularProgressIndicator percentage={daysToWaterIn} max={waterFrequency} />
+                                        <Text>{daysToWaterIn > 0 ? `Water in ${daysToWaterIn} days` : `Water now`}</Text>
+                                    </TouchableOpacity>
 
-                            </View>
-                        </>}
+                                    <TouchableOpacity onPress={() => updatePlantAction('fertilise')}>
+                                        <CircularProgressIndicator percentage={daysToFertiliseIn} max={fertilisingFrequency} />
+                                        <Text>{daysToFertiliseIn > 0 ? `Fertilise in ${daysToFertiliseIn} days` : `Fertilise now`}</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => updatePlantAction('weed')}>
+                                        <CircularProgressIndicator percentage={daysToWeedIn} max={weedingFrequency} />
+                                        <Text>{daysToWeedIn > 0 ? `Weed in ${daysToWeedIn} days` : `Weed now`}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </>}
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <PlantDetailIcon iconType='annual' />
                             <PlantDetailIcon iconType='flower' />
                             <PlantDetailIcon iconType='water0' displayText='Water' />
-                        </View>
+                        </View> */}
 
 
+                            <View style={{ justifyContent: 'center', flexDirection: 'row', marginTop: 10 }}>
+                                <CircularProgressIndicator percentage={daysSincePlanted > daysTillNextPlantStage ? daysTillNextPlantStage : daysSincePlanted} max={daysTillNextPlantStage} radius={100} icon={growthStageIcon} />
+                            </View>
+                            <PlantingCalendar plantSowingDates={plant.sowingDates} />
 
-                        <PlantingCalendar plantSowingDates={plant.sowingDates} />
 
-
-                        {!isUserPlant && <>
-                            <Button onPress={() => router.push({ pathname: '/form', params: { formType: 'addPlant', id: plant.id } })}>Add to Garden</Button>
-                            <IconButton
-                                icon={isFavourite ? "heart" : "heart-outline"}
-                                color={colours.primary}
-                                size={20}
-                                onPress={() => updateFavourites()}
-                            />
+                            {!isUserPlant && <>
+                                <Button onPress={() => router.push({ pathname: '/form', params: { formType: 'addPlant', id: plant.id } })}>Add to Garden</Button>
+                                <IconButton
+                                    icon={isFavourite ? "heart" : "heart-outline"}
+                                    color={colours.primary}
+                                    size={20}
+                                    onPress={() => updateFavourites()}
+                                />
+                            </>}
                         </>}
-                    </>}
-                </SafeAreaWrapperFullWidth >
-            }
-
+                    </SafeAreaWrapperFullWidth >
+                }
+            </>}
         </>
     )
 }

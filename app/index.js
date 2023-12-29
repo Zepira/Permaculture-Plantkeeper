@@ -3,7 +3,8 @@ import { Text } from "react-native-paper";
 import { DataContext } from "../utils/context/dataContext";
 import { SafeAreaWrapperFullWidth } from "../components/safeAreaWrapper";
 import { View } from "react-native";
-import { AddNewButton } from "../components/addNewButton";
+import { AddNewButton } from "../components/buttons/addNewButton";
+import { CircularProgressIndicator } from "../components/circularProgressIndicator";
 
 export default function Home() {
 
@@ -22,6 +23,7 @@ export default function Home() {
             <SafeAreaWrapperFullWidth>
                 <Text>hello, {user?.firstName}</Text>
                 <Text>All the shit will go here</Text>
+                {/* <CircularProgressIndicator /> */}
             </SafeAreaWrapperFullWidth>
             {/* <AddNewButton navigation={navigation} /> */}
         </>

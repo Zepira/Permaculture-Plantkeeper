@@ -24,13 +24,13 @@ export default MyGarden = () => {
         <>
             <SafeAreaWrapperFullWidth>
 
-                <ScrollView>
+                <ScrollView style={{ paddingHorizontal: 20, }}>
                     {userGardens.map((garden) =>
                         <TouchableOpacity onPress={() => router.push('/gardens/' + garden.id)} key={garden.id} style={{
-                            borderColor: 'black', borderWidth: 1, marginTop: 20, borderRadius: 20, flex: 1, justifyContent: 'center', padding: 20
+                            borderColor: 'black', borderWidth: 1, marginTop: 20, borderRadius: 20, flex: 1, justifyContent: 'space-between', padding: 20, flexDirection: 'row'
                         }}>
-                            <Avatar.Image size={60} source={{ uri: gardenType[garden.gardenType].defaultImage }} />
-                            <Text variant='smallHeading'>{gardenType[garden.gardenType].optionText}</Text>
+                            <Avatar.Image size={80} source={{ uri: gardenType[garden.gardenType].defaultImage }} />
+                            <Text variant='smallHeading' style={{ textAlign: 'left' }}>{garden.gardenName ? garden.gardenName : gardenType[garden.gardenType].optionText}</Text>
                         </TouchableOpacity>
                     )}
                 </ScrollView>

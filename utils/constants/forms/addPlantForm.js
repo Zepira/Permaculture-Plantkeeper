@@ -28,10 +28,10 @@ export const addPlantForm =
                 optionText: 'Mature Plant',
                 optionMapping: 3
             },
-            {
-                optionText: 'Cutting',
-                optionMapping: 4
-            }
+            // {
+            //     optionText: 'Cutting',
+            //     optionMapping: 4
+            // }
         ]
     }];
 
