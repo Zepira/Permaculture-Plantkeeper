@@ -12,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#5EBB91"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -22,7 +20,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.zepira.plantkeeper"
     },
     "extra": {
       "eas": {
@@ -30,9 +29,7 @@
       }
     },
     "owner": "zepira",
-    "plugins": [
-      "expo-router"
-    ],
+    "plugins": ["expo-router"],
     "runtimeVersion": {
       "policy": "appVersion"
     },
