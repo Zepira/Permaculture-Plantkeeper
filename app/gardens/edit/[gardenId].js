@@ -1,14 +1,16 @@
 
 import { useLocalSearchParams, router } from "expo-router";
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { gardenType, lighting } from "../../../utils/constants/constants";
 import { DataContext } from "../../../utils/context/dataContext";
 import { TopActionButton, TopActionButtonContainer } from "../../../components/buttons/topActionButton";
-import { Button, Dialog, Portal, TextInput } from "react-native-paper";
+import { Button, Dialog, Portal } from "react-native-paper";
+import { CustomTextInput } from "../../../components/formComponents/textInput";
 import { useFocusEffect } from "@react-navigation/native";
 import { Picker } from '@react-native-picker/picker';
 import { colours } from "../../../theme/colours";
+import { Text } from "../../../theme";
 
 
 
@@ -73,16 +75,16 @@ export default EditGarden = () => {
 
 
     return (
-        <View style={{ padding: 20 }}>
+        <View >
             <TopActionButtonContainer>
                 <TopActionButton onPressAction={() => router.replace('/gardens/' + params.gardenId)} icon="arrow-left" />
             </TopActionButtonContainer>
-            {userGarden && <View>
-                <Text>{userGarden.gardenName ? userGarden.gardenName : gardenType[userGarden.gardenType].optionText}</Text>
-                <TextInput
+            {userGarden && <View style={{ gap: 10, padding: 20 }}>
+                <Text variant="smallHeading">{userGarden.gardenName ? userGarden.gardenName : gardenType[userGarden.gardenType].optionText}</Text>
+                <CustomTextInput
                     label="Garden Name"
                     value={gardenName}
-                    mode='outlined'
+
                     onChangeText={gardenName => setGardenName(gardenName)}
                 />
                 <Picker
@@ -105,29 +107,29 @@ export default EditGarden = () => {
                     })}
 
                 </Picker>
-                <TextInput
+                <CustomTextInput
                     label="Custom watering frequency"
                     value={customWateringFrequency}
                     inputMode='numeric'
-                    mode='outlined'
+
                     onChangeText={wateringFrequency => setCustomWateringFrequency(wateringFrequency)}
                 />
-                <TextInput
+                <CustomTextInput
                     label="Custom weeding frequency"
                     value={customWeedingFrequency}
                     inputMode='numeric'
-                    mode='outlined'
+
                     onChangeText={weedingFrequency => setCustomWeedingFrequency(weedingFrequency)}
                 />
-                <TextInput
+                <CustomTextInput
                     label="Custom fertilising frequency"
                     value={customFertilisingFrequency}
                     inputMode='numeric'
-                    mode='outlined'
+
                     onChangeText={fertilisingFrequency => setCustomFertilisingFrequency(fertilisingFrequency)}
                 />
-                <Button onPress={() => saveGarden()}>Submit</Button>
-                <Button buttonColor={colours.error} onPress={() => setShowConfirmDelete(true)}>Delete</Button>
+                <Button buttonColor={colours.primary} textColor='white' onPress={() => saveGarden()}>Submit</Button>
+                <Button buttonColor={colours.error} textColor='white' onPress={() => setShowConfirmDelete(true)}>Delete</Button>
             </View>
             }
             <Portal>

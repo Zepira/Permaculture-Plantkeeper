@@ -16,7 +16,7 @@ export const colours = {
     onError: '#e6000d',
     errorContainer: '#e6000d',
     onErrorContainer: '#e6000d',
-    background: 'transparent',//background of outlined text input
+    background: '#F1F1F1',//background of outlined text input
     onBackground: '#e6000d',
     surface: 'rgb(255, 251, 255)',//background of outlined chips
     onSurface: '#5EBB91',//search text color

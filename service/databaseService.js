@@ -92,6 +92,12 @@ const deleteUserGarden = async (db, gardenId) => {
 
 }
 
+const deleteUserPlant = async (db, plantId) => {
+    console.log('deleteUserPlant', plantId);
+    return deleteDoc(doc(db, 'userPlants', plantId));
+
+}
+
 const getGardenPlants = async (db, gardenId) => {
 
     async function getGardenPlants() {
@@ -135,4 +141,4 @@ const getGardenPlants = async (db, gardenId) => {
 
 
 
-export { getUserData, getPlantData, createGarden, getUserGardens, createUserPlant, getGardenPlants, updateUserFavourites, getUserPlants, updateUserPlant, updateUserGarden, deleteUserGarden };
+export { getUserData, getPlantData, createGarden, getUserGardens, createUserPlant, getGardenPlants, updateUserFavourites, getUserPlants, updateUserPlant, updateUserGarden, deleteUserGarden, deleteUserPlant };

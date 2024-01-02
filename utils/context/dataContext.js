@@ -1,7 +1,7 @@
 
 import React, { useState, createContext, useEffect, useContext } from 'react';
 import { getFirestore, collection, getDocs, doc, query, setDoc, updateDoc, getDoc, where, } from "firebase/firestore";
-import { getUserData, createGarden, getUserGardens, getPlantData, createUserPlant, updateUserFavourites, getUserPlants, updateUserPlant, updateUserGarden, deleteUserGarden } from "../../service/databaseService";
+import { getUserData, createGarden, getUserGardens, getPlantData, createUserPlant, updateUserFavourites, getUserPlants, updateUserPlant, updateUserGarden, deleteUserGarden, deleteUserPlant } from "../../service/databaseService";
 import { AuthenticationContext } from "./authenticationContext";
 
 
@@ -37,12 +37,39 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
     }
 
     const updateUserPlantData = (updatedPlant) => {
-        console.log('updateUserPlantData', updatedPlant)
-        updateUserPlant(db, updatedPlant).then((plant) => {
-            return;
-        }).catch((e) => {
-            console.log(e);
-        })
+
+        async function updatePlant() {
+            const b = await updateUserPlant(db, updatedPlant);
+            return b;
+        }
+
+        async function updateUserPlantList() {
+            const a = await getDocs(query(collection(db, 'userPlants'), where('user', '==', userId)))
+            return a;
+        }
+
+        async function runAsyncFunctions() {
+            const a = await updatePlant();
+            const userPlantsList = await updateUserPlantList();
+            const docs = userPlantsList.docs.map((f) => ({ ...f.data(), ...{ id: f.id } }));
+            return docs;
+        }
+
+        runAsyncFunctions()
+            .then((result) => {
+                setUserPlants(result);
+
+
+                return result;
+            })
+            .catch((error) => {
+                console.error(error);
+                return error;
+            });
+
+
+        return runAsyncFunctions();
+
     }
 
 
@@ -173,6 +200,16 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
 
     }
 
+    const deletePlant = async (plantId) => {
+        deleteUserPlant(db, plantId).then(() => {
+            getAllPlants();
+            return;
+        }).catch((e) => {
+            console.log(e);
+        })
+
+    }
+
     return (
         <DataContext.Provider
             value={{
@@ -189,7 +226,8 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
                 userPlants,
                 updateUserPlantData,
                 updateGarden,
-                deleteGarden
+                deleteGarden,
+                deletePlant
             }}>
             {children}
         </DataContext.Provider>

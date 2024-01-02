@@ -258,7 +258,7 @@ export default PlantDetail = () => {
                     <TopActionButtonContainer>
                         <TopActionButton onPressAction={() => isUserPlant ? router.replace('/gardens/' + userPlant.gardenId) : router.replace('/plants')} icon="arrow-left" />
 
-                        {isUserPlant && <TopActionButton onPressAction={() => isUserPlant ? router.replace('/plants/' + userPlant.plantId) : router.replace('/plants')} icon="cog" />}
+                        {isUserPlant && <TopActionButton onPressAction={() => router.replace('/plants/edit/' + userPlant.id)} icon="cog" />}
 
                     </TopActionButtonContainer>
 

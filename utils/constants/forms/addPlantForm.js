@@ -1,4 +1,5 @@
 
+import { growthStages } from "../constants";
 
 
 export const addPlantForm =
@@ -15,23 +16,6 @@ export const addPlantForm =
         databaseValue: 'growthStage',
         questionSubText: '',
         questionType: 'select',
-        options: [
-            {
-                optionText: 'Seed',
-                optionMapping: 1
-            },
-            {
-                optionText: 'Seedling',
-                optionMapping: 2
-            },
-            {
-                optionText: 'Mature Plant',
-                optionMapping: 3
-            },
-            // {
-            //     optionText: 'Cutting',
-            //     optionMapping: 4
-            // }
-        ]
+        options: growthStages
     }];
 
