@@ -57,7 +57,7 @@ export default PlantDetail = () => {
         useCallback(() => {
 
             setIsLoading(true);
-
+            console.log('HASDASDAASDSDASD');
 
             if (userPlants, plants) {
                 const originalUserPlant = userPlants !== null ? userPlants.find((plant) => plant.id === params.plantId) : null;
@@ -92,6 +92,7 @@ export default PlantDetail = () => {
                 }
                 else {
                     const plant = plants.find((plant) => plant.id === params.plantId);
+                    console.log('HASDASDASDASD', plant);
                     setPlant(plant);
                     setIsUserPlant(false);
                     setVariety(null);
@@ -257,8 +258,8 @@ export default PlantDetail = () => {
                     <TopActionButtonContainer>
                         <TopActionButton onPressAction={() => isUserPlant ? router.replace('/gardens/' + userPlant.gardenId) : router.replace('/plants')} icon="arrow-left" />
 
+                        {isUserPlant && <TopActionButton onPressAction={() => isUserPlant ? router.replace('/plants/' + userPlant.plantId) : router.replace('/plants')} icon="cog" />}
 
-                        <TopActionButton onPressAction={() => isUserPlant ? router.replace('/gardens/' + userPlant.gardenId) : router.replace('/plants')} icon="cog" />
                     </TopActionButtonContainer>
 
 
@@ -278,21 +279,23 @@ export default PlantDetail = () => {
                                 <PlantDetailIcon displayText='Days to Transplant' value={(6 * 7) - daysSincePlanted} />
                                 <PlantDetailIcon displayText='Mature in' value={plant.sproutToHarvest + plant.daysToSprout - daysSincePlanted} />
                             </View> */}
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <TouchableOpacity onPress={() => updatePlantAction('water')}>
-                                        <CircularProgressIndicator percentage={daysToWaterIn} max={waterFrequency} />
-                                        <Text>{daysToWaterIn > 0 ? `Water in ${daysToWaterIn} days` : `Water now`}</Text>
-                                    </TouchableOpacity>
+                                {isUserPlant &&
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <TouchableOpacity onPress={() => updatePlantAction('water')}>
+                                            <CircularProgressIndicator percentage={daysToWaterIn} max={waterFrequency} />
+                                            <Text>{daysToWaterIn > 0 ? `Water in ${daysToWaterIn} days` : `Water now`}</Text>
+                                        </TouchableOpacity>
 
-                                    <TouchableOpacity onPress={() => updatePlantAction('fertilise')}>
-                                        <CircularProgressIndicator percentage={daysToFertiliseIn} max={fertilisingFrequency} />
-                                        <Text>{daysToFertiliseIn > 0 ? `Fertilise in ${daysToFertiliseIn} days` : `Fertilise now`}</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => updatePlantAction('weed')}>
-                                        <CircularProgressIndicator percentage={daysToWeedIn} max={weedingFrequency} />
-                                        <Text>{daysToWeedIn > 0 ? `Weed in ${daysToWeedIn} days` : `Weed now`}</Text>
-                                    </TouchableOpacity>
-                                </View>
+                                        <TouchableOpacity onPress={() => updatePlantAction('fertilise')}>
+                                            <CircularProgressIndicator percentage={daysToFertiliseIn} max={fertilisingFrequency} />
+                                            <Text>{daysToFertiliseIn > 0 ? `Fertilise in ${daysToFertiliseIn} days` : `Fertilise now`}</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => updatePlantAction('weed')}>
+                                            <CircularProgressIndicator percentage={daysToWeedIn} max={weedingFrequency} />
+                                            <Text>{daysToWeedIn > 0 ? `Weed in ${daysToWeedIn} days` : `Weed now`}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                }
                             </>}
 
                             {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -302,9 +305,10 @@ export default PlantDetail = () => {
                         </View> */}
 
 
-                            <View style={{ justifyContent: 'center', flexDirection: 'row', marginTop: 10 }}>
+                            {isUserPlant && <View style={{ justifyContent: 'center', flexDirection: 'row', marginTop: 10 }}>
                                 <CircularProgressIndicator percentage={daysSincePlanted > daysTillNextPlantStage ? daysTillNextPlantStage : daysSincePlanted} max={daysTillNextPlantStage} radius={100} icon={growthStageIcon} />
                             </View>
+                            }
                             <PlantingCalendar plantSowingDates={plant.sowingDates} />
 
 

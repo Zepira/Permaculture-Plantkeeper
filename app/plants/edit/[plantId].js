@@ -12,7 +12,7 @@ import { colours } from "../../../theme/colours";
 
 
 
-export default EditGarden = () => {
+export default EditPlant = () => {
 
     const params = useLocalSearchParams();
 
@@ -28,47 +28,47 @@ export default EditGarden = () => {
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
 
-    useFocusEffect(
+    // useFocusEffect(
 
-        useCallback(() => {
+    //     useCallback(() => {
 
-            const garden = userGardens.find((garden) => garden.id === params.gardenId);
-            setUserGarden(garden);
-            setSelectedGardenType(gardenType[garden.gardenType].optionMapping);
-            setSelectedLighting(lighting[garden.lighting - 1].optionMapping);
-            setCustomWateringFrequency(garden.wateringFrequency);
-            setCustomFertilisingFrequency(garden.fertilisingFrequency);
-            setCustomWeedingFrequency(garden.weedingFrequency);
-            if (garden.gardenName) {
-                setGardenName(garden.gardenName);
-            }
+    //         const garden = userGardens.find((garden) => garden.id === params.gardenId);
+    //         setUserGarden(garden);
+    //         setSelectedGardenType(gardenType[garden.gardenType].optionMapping);
+    //         setSelectedLighting(lighting[garden.lighting - 1].optionMapping);
+    //         setCustomWateringFrequency(garden.wateringFrequency);
+    //         setCustomFertilisingFrequency(garden.fertilisingFrequency);
+    //         setCustomWeedingFrequency(garden.weedingFrequency);
+    //         if (garden.gardenName) {
+    //             setGardenName(garden.gardenName);
+    //         }
 
-        }, [params, userGardens])
-    );
+    //     }, [params, userGardens])
+    // );
 
-    const saveGarden = () => {
-        const updatedGarden = {
-            ...userGarden,
-            gardenName: gardenName,
-            gardenType: selectedGardenType,
-            lighting: selectedLighting,
-            wateringFrequency: customWateringFrequency,
-            weedingFrequency: customWeedingFrequency,
-            fertilisingFrequency: customFertilisingFrequency
-        }
+    // const saveGarden = () => {
+    //     const updatedGarden = {
+    //         ...userGarden,
+    //         gardenName: gardenName,
+    //         gardenType: selectedGardenType,
+    //         lighting: selectedLighting,
+    //         wateringFrequency: customWateringFrequency,
+    //         weedingFrequency: customWeedingFrequency,
+    //         fertilisingFrequency: customFertilisingFrequency
+    //     }
 
-        updateGarden(updatedGarden).then(() => {
-            setUserGarden(updatedGarden);
-            router.replace('/gardens/' + params.gardenId);
-        })
+    //     updateGarden(updatedGarden).then(() => {
+    //         setUserGarden(updatedGarden);
+    //         router.replace('/gardens/' + params.gardenId);
+    //     })
 
-    }
+    // }
 
-    const onDeleteGarden = () => {
-        console.log('onDeleteGarden', userGarden)
-        setShowConfirmDelete(false);
-        deleteGarden(userGarden.id).then(() => router.replace('/gardens'));
-    }
+    // const onDeleteGarden = () => {
+    //     console.log('onDeleteGarden', userGarden)
+    //     setShowConfirmDelete(false);
+    //     deleteGarden(userGarden.id).then(() => router.replace('/gardens'));
+    // }
 
 
 
@@ -77,7 +77,7 @@ export default EditGarden = () => {
             <TopActionButtonContainer>
                 <TopActionButton onPressAction={() => router.replace('/gardens/' + params.gardenId)} icon="arrow-left" />
             </TopActionButtonContainer>
-            {userGarden && <View>
+            {/* {userGarden && <View>
                 <Text>{userGarden.gardenName ? userGarden.gardenName : gardenType[userGarden.gardenType].optionText}</Text>
                 <TextInput
                     label="Garden Name"
@@ -129,7 +129,7 @@ export default EditGarden = () => {
                 <Button onPress={() => saveGarden()}>Submit</Button>
                 <Button buttonColor={colours.error} onPress={() => setShowConfirmDelete(true)}>Delete</Button>
             </View>
-            }
+            } */}
             <Portal>
                 <Dialog visible={showConfirmDelete} onDismiss={() => setShowConfirmDelete(false)}>
                     <Dialog.Title>Delete</Dialog.Title>

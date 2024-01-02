@@ -30,7 +30,7 @@ export default Plant = () => {
 
                 {plants && plants.map((plant) =>
 
-                    <TouchableOpacity onPress={() => router.push({ pathname: '/(plants)/' + plant.id, params: { origin: 'plants' } })} key={plant.id} style={{
+                    <TouchableOpacity onPress={() => router.replace('/plants/' + plant.id)} key={plant.id} style={{
                         height: 80, borderColor: 'black', borderWidth: 1, marginTop: 20, borderRadius: 20, flex: 1, justifyContent: 'center', paddingLeft: 20
                     }}>
                         <Avatar.Image size={60} source={{ uri: plant.images[0] }} />

@@ -1,6 +1,6 @@
 import React from "react";
 import { colours } from "../../theme/colours";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View, StatusBar } from "react-native";
 import { Avatar, TouchableRipple } from "react-native-paper";
 
 
@@ -12,4 +12,4 @@ export const TopActionButton = ({ onPressAction, icon }) => {
         </TouchableRipple>);
 }
 
-export const TopActionButtonContainer = ({ children }) => <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 20 }}>{children}</View>
+export const TopActionButtonContainer = ({ children }) => <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 20, marginTop: StatusBar.currentHeight }}>{children}</View>
