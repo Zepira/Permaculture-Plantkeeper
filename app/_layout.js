@@ -99,14 +99,14 @@ export default function Layout() {
                             }}
                         />
 
-                        {/* <Tabs.Screen
-                            name="plants/[plantId]"
+                        <Tabs.Screen
+                            name="(plants)/[plantId]"
                             options={{
                                 // This tab will no longer show up in the tab bar.
                                 href: null,
 
                             }}
-                        /> */}
+                        />
 
 
 

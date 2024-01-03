@@ -52,10 +52,10 @@ export const AddNewButton = () => {
                 <FAB.Group
                     open={isOpen}
                     visible
-                    backdropColor='rgba(255, 255, 255, 0.9)'
+                    backdropColor='transparent'
                     fabStyle={styles.fab}
                     color="white"
-                    icon={isOpen ? 'circle' : 'plus'}
+                    icon={isOpen ? 'plus' : 'plus'}
                     actions={[
                         {
                             icon: 'leaf',

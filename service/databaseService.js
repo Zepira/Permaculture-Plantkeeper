@@ -1,4 +1,4 @@
-import { doc, setDoc, getDoc, getDocs, collection, query, where, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, getDocs, collection, query, where, addDoc, updateDoc } from 'firebase/firestore';
 import { useEffect } from "react";
 import { gardenType } from "../utils/constants/constants";
 
@@ -53,10 +53,9 @@ const getUserGardens = async (db, userId) => {
 }
 
 const updateUserGarden = async (db, updatedGarden) => {
+    console.log('updateUserGarden in db Service', updatedGarden);
     try {
-        return await updateDoc(doc(db, 'userGardens', updatedGarden.id), updatedGarden);
-
-
+        return updateDoc(doc(db, 'userGardens', updatedGarden.id), updatedGarden);
     } catch (err) {
         console.log(err);
     }
@@ -84,18 +83,6 @@ const createUserPlant = async (db, newPlant, variety, userId) => {
         console.log(e);
         throw (e);
     }
-}
-
-const deleteUserGarden = async (db, gardenId) => {
-    console.log('deleteUserGarden', gardenId);
-    return deleteDoc(doc(db, 'userGardens', gardenId));
-
-}
-
-const deleteUserPlant = async (db, plantId) => {
-    console.log('deleteUserPlant', plantId);
-    return deleteDoc(doc(db, 'userPlants', plantId));
-
 }
 
 const getGardenPlants = async (db, gardenId) => {
@@ -141,4 +128,4 @@ const getGardenPlants = async (db, gardenId) => {
 
 
 
-export { getUserData, getPlantData, createGarden, getUserGardens, createUserPlant, getGardenPlants, updateUserFavourites, getUserPlants, updateUserPlant, updateUserGarden, deleteUserGarden, deleteUserPlant };
+export { getUserData, getPlantData, createGarden, getUserGardens, createUserPlant, getGardenPlants, updateUserFavourites, getUserPlants, updateUserPlant, updateUserGarden };

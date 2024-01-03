@@ -1,7 +1,7 @@
 
 import React, { useState, createContext, useEffect, useContext } from 'react';
-import { getFirestore, collection, getDocs, doc, query, setDoc, updateDoc, getDoc, where, } from "firebase/firestore";
-import { getUserData, createGarden, getUserGardens, getPlantData, createUserPlant, updateUserFavourites, getUserPlants, updateUserPlant, updateUserGarden, deleteUserGarden, deleteUserPlant } from "../../service/databaseService";
+import { getFirestore, collection, getDocs, doc, getDoc, query, setDoc } from "firebase/firestore";
+import { getUserData, createGarden, getUserGardens, getPlantData, createUserPlant, updateUserFavourites, getUserPlants, updateUserPlant, updateUserGarden } from "../../service/databaseService";
 import { AuthenticationContext } from "./authenticationContext";
 
 
@@ -37,39 +37,12 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
     }
 
     const updateUserPlantData = (updatedPlant) => {
-
-        async function updatePlant() {
-            const b = await updateUserPlant(db, updatedPlant);
-            return b;
-        }
-
-        async function updateUserPlantList() {
-            const a = await getDocs(query(collection(db, 'userPlants'), where('user', '==', userId)))
-            return a;
-        }
-
-        async function runAsyncFunctions() {
-            const a = await updatePlant();
-            const userPlantsList = await updateUserPlantList();
-            const docs = userPlantsList.docs.map((f) => ({ ...f.data(), ...{ id: f.id } }));
-            return docs;
-        }
-
-        runAsyncFunctions()
-            .then((result) => {
-                setUserPlants(result);
-
-
-                return result;
-            })
-            .catch((error) => {
-                console.error(error);
-                return error;
-            });
-
-
-        return runAsyncFunctions();
-
+        console.log('updateUserPlantData', updatedPlant)
+        updateUserPlant(db, updatedPlant).then((plant) => {
+            return;
+        }).catch((e) => {
+            console.log(e);
+        })
     }
 
 
@@ -102,11 +75,9 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
         })
     }
 
-    const getAllUserGardens = async () => {
+    const getAllUserGardens = () => {
         getUserGardens(db, userId).then((gardens) => {
             setUserGardens(gardens);
-            console.log('updateGarden')
-            return;
         }).catch((er) => {
             console.log(er);
             return er;
@@ -143,66 +114,10 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
         })
     }
 
-    const updateGarden = async (updatedGarden) => {
+    const updateGarden = (updatedGarden) => {
 
-        async function updateUserGarden() {
-            const b = await updateDoc(doc(db, 'userGardens', updatedGarden.id), updatedGarden);
-            return b;
-        }
-
-        async function updateUserGardenList() {
-            const a = await getDocs(query(collection(db, 'userGardens'), where('user', '==', userId)))
-            return a;
-        }
-
-        async function runAsyncFunctions() {
-            const a = await updateUserGarden();
-            const userGardensList = await updateUserGardenList();
-            const docs = userGardensList.docs.map((f) => ({ ...f.data(), ...{ id: f.id } }));
-            return docs;
-        }
-
-        runAsyncFunctions()
-            .then((result) => {
-                setUserGardens(result);
-
-
-                return result;
-            })
-            .catch((error) => {
-                console.error(error);
-                return error;
-            });
-
-
-        return runAsyncFunctions();
-
-
-
-        // getAllUserGardens().then((garden) => {
-        //     console.log('updateGarden')
-        //     return garden;
-        // });
-
-        // }).catch((e) => {
-        //     console.log('it errored', e);
-        // })
-
-    }
-
-    const deleteGarden = async (gardenId) => {
-        deleteUserGarden(db, gardenId).then(() => {
+        updateUserGarden(db, updatedGarden).then(() => {
             getAllUserGardens();
-            return;
-        }).catch((e) => {
-            console.log(e);
-        })
-
-    }
-
-    const deletePlant = async (plantId) => {
-        deleteUserPlant(db, plantId).then(() => {
-            getAllPlants();
             return;
         }).catch((e) => {
             console.log(e);
@@ -225,9 +140,7 @@ export const DataContextProvider = ({ db, children, setIsLoading }) => {
                 getAllUserPlants,
                 userPlants,
                 updateUserPlantData,
-                updateGarden,
-                deleteGarden,
-                deletePlant
+                updateGarden
             }}>
             {children}
         </DataContext.Provider>

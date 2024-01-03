@@ -82,18 +82,3 @@ export const lighting = [
         optionDetail: 'At least 8h of full sun'
     }
 ];
-
-export const growthStages = [
-    {
-        optionText: 'Seed',
-        optionMapping: 1
-    },
-    {
-        optionText: 'Seedling',
-        optionMapping: 2
-    },
-    {
-        optionText: 'Mature Plant',
-        optionMapping: 3
-    },
-];
