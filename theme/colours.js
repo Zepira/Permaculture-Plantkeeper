@@ -69,4 +69,3 @@ export const colours = {
     },
     transparent: 'rgba(255,255,255,1)'
 };
-

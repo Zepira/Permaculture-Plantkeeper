@@ -29,7 +29,6 @@ export const CircularProgressIndicator = ({
     const circumference = 2 * Math.PI * radius;
     const halfCircle = radius + strokeWidth;
 
-
     //removed animation as it was either not updating when values changed, pages changed etc, or was bouncing back and forth
 
     // const animation = (toValue) => {
