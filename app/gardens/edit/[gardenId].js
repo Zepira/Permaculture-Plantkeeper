@@ -67,7 +67,6 @@ export default EditGarden = () => {
     }
 
     const onDeleteGarden = () => {
-        console.log('onDeleteGarden', userGarden)
         setShowConfirmDelete(false);
         deleteGarden(userGarden.id).then(() => router.replace('/gardens'));
     }
