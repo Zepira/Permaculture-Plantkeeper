@@ -7,10 +7,10 @@ import { DataContext } from "../../../utils/context/dataContext";
 import { TopActionButton, TopActionButtonContainer } from "../../../components/buttons/topActionButton";
 import { Button, Dialog, Portal, TextInput } from "react-native-paper";
 import { useFocusEffect } from "@react-navigation/native";
-import { Picker } from '@react-native-picker/picker';
+// import { Picker } from '@react-native-picker/picker';
 import { colours } from "../../../theme/colours";
 import { CustomTextInput } from "../../../components/formComponents/textInput";
-import { CustomPicker } from "../../../components/formComponents/picker";
+// import { CustomPicker } from "../../../components/formComponents/picker";
 
 
 
@@ -117,10 +117,10 @@ export default EditPlant = () => {
                     mode='outlined'
                     onChangeText={fertilisingFrequency => setCustomFertilisingFrequency(fertilisingFrequency)}
                 />
-                <CustomPicker label='Plant growth stage' value={growthStage} options={growthStages} onChangeSelect={setgrowthStage} />
+                {/* <CustomPicker label='Plant growth stage' value={growthStage} options={growthStages} onChangeSelect={setgrowthStage} /> */}
 
                 <Text>Variety</Text>
-                <Picker
+                {/* <Picker
                     selectedValue={variety}
                     onValueChange={(itemValue, itemIndex) =>
                         setVariety(itemValue)
@@ -130,7 +130,7 @@ export default EditPlant = () => {
                         return <Picker.Item key={variety.varietyName} label={variety.varietyName} value={variety.varietyName} />
                     })}
 
-                </Picker>
+                </Picker> */}
                 <Button buttonColor={colours.primary} textColor='white' onPress={() => onSavePlant()}>Submit</Button>
                 <Button buttonColor={colours.error} textColor='white' onPress={() => setShowConfirmDelete(true)}>Delete</Button>
             </View>

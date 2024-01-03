@@ -2,7 +2,7 @@ import React from 'react';
 
 import { TextInput } from "react-native-paper";
 import { Text } from "../../theme";
-import { Picker } from "@react-native-picker/picker";
+// import { Picker } from "@react-native-picker/picker";
 import { View } from "react-native";
 
 
@@ -11,7 +11,7 @@ export const CustomPicker = ({ value, options, onChangeSelect, label }) => {
 
     return (
         <View>
-            <Text>{label}</Text>
+            {/* <Text>{label}</Text>
             <Picker
                 selectedValue={value}
                 onValueChange={(itemValue, itemIndex) =>
@@ -20,7 +20,7 @@ export const CustomPicker = ({ value, options, onChangeSelect, label }) => {
                 {options.map((option) => {
                     return <Picker.Item key={option.optionMapping} label={option.optionText} value={option.optionMapping} />
                 })}
-            </Picker>
+            </Picker> */}
         </View>
     )
 }
