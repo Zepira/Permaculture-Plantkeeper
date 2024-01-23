@@ -11,6 +11,8 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Picker } from '@react-native-picker/picker';
 import { colours } from "../../../theme/colours";
 import { Text } from "../../../theme";
+import { SafeAreaWrapper, SafeAreaWrapperFullWidth } from "../../../components/safeAreaWrapper";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 
@@ -74,11 +76,11 @@ export default EditGarden = () => {
 
 
     return (
-        <View >
+        <SafeAreaWrapper >
             <TopActionButtonContainer>
                 <TopActionButton onPressAction={() => router.replace('/gardens/' + params.gardenId)} icon="arrow-left" />
             </TopActionButtonContainer>
-            {userGarden && <View style={{ gap: 10, padding: 20 }}>
+            {userGarden && <ScrollView style={{ gap: 10 }}>
                 <Text variant="smallHeading">{userGarden.gardenName ? userGarden.gardenName : gardenType[userGarden.gardenType].optionText}</Text>
                 <CustomTextInput
                     label="Garden Name"
@@ -129,7 +131,7 @@ export default EditGarden = () => {
                 />
                 <Button buttonColor={colours.primary} textColor='white' onPress={() => saveGarden()}>Submit</Button>
                 <Button buttonColor={colours.error} textColor='white' onPress={() => setShowConfirmDelete(true)}>Delete</Button>
-            </View>
+            </ScrollView>
             }
             <Portal>
                 <Dialog visible={showConfirmDelete} onDismiss={() => setShowConfirmDelete(false)}>
@@ -143,6 +145,6 @@ export default EditGarden = () => {
                     </Dialog.Actions>
                 </Dialog>
             </Portal>
-        </View>
+        </SafeAreaWrapper>
     );
 }

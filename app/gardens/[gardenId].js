@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Text } from "../../theme/text";
 import { DataContext } from "../../utils/context/dataContext";
-import { SafeAreaWrapperFullWidth } from "../../components/safeAreaWrapper";
+import { SafeAreaWrapper } from "../../components/safeAreaWrapper";
 import { TouchableOpacity, View } from "react-native";
 import { gardenType } from "../../utils/constants/constants";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
@@ -40,12 +40,13 @@ export default GardenDetail = () => {
 
     return (
         <>
-            <TopActionButtonContainer>
-                <TopActionButton onPressAction={() => router.push('/gardens')} icon="arrow-left" />
-                <TopActionButton onPressAction={() => router.push('/gardens/edit/' + params.gardenId)} icon="cog" />
 
-            </TopActionButtonContainer>
-            <SafeAreaWrapperFullWidth style={{ paddingHorizontal: 20, }}>
+            <SafeAreaWrapper >
+                <TopActionButtonContainer>
+                    <TopActionButton onPressAction={() => router.push('/gardens')} icon="arrow-left" />
+                    <TopActionButton onPressAction={() => router.push('/gardens/edit/' + params.gardenId)} icon="cog" />
+
+                </TopActionButtonContainer>
 
                 <Text variant='smallHeading'>{userGarden && (userGarden.gardenName ? userGarden.gardenName : gardenType[userGarden.gardenType].optionText)}</Text>
                 {plants && plants.map((plant, index) =>
@@ -71,7 +72,7 @@ export default GardenDetail = () => {
                         </View>
                     </Modal>
                 </Portal>
-            </SafeAreaWrapperFullWidth>
+            </SafeAreaWrapper>
         </>
     )
 }

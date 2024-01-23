@@ -1,7 +1,7 @@
 
 import { useLocalSearchParams, router } from "expo-router";
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { gardenType, growthStages, lighting } from "../../../utils/constants/constants";
 import { DataContext } from "../../../utils/context/dataContext";
 import { TopActionButton, TopActionButtonContainer } from "../../../components/buttons/topActionButton";
@@ -11,6 +11,8 @@ import { Picker } from '@react-native-picker/picker';
 import { colours } from "../../../theme/colours";
 import { CustomTextInput } from "../../../components/formComponents/textInput";
 import { CustomPicker } from "../../../components/formComponents/picker";
+import { SafeAreaWrapper } from "../../../components/safeAreaWrapper";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 
@@ -18,7 +20,7 @@ export default EditPlant = () => {
 
     const params = useLocalSearchParams();
 
-    const { plants, userPlants, updateUserPlantData, deletePlant } = useContext(DataContext);
+    const { plants, userPlants, updateUserPlantData, deletePlant, userGardens } = useContext(DataContext);
     const [plant, setPlant] = useState(null);
     const [userPlant, setUserPlant] = useState(null);
     const [variety, setVariety] = useState(-1);
@@ -30,6 +32,7 @@ export default EditPlant = () => {
     const [growthStage, setgrowthStage] = useState(null);
 
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+    const [showTransplantMenu, setShowTransplantMenu] = useState(false);
 
     useFocusEffect(
 
@@ -58,7 +61,7 @@ export default EditPlant = () => {
 
     );
 
-    const onSavePlant = () => {
+    const onSavePlant = (updatedGardenId) => {
         const varietyDetailsIndex = variety ? plant.varieties.findIndex(a => a.varietyName == variety) : null;
         console.log('variety', variety, varietyDetailsIndex);
         const updatedPlant = {
@@ -68,7 +71,8 @@ export default EditPlant = () => {
             ...(customWateringFrequency ? { wateringFrequency: customWateringFrequency } : {}),
             ...(customWeedingFrequency ? { weedingFrequency: customWeedingFrequency } : {}),
             ...(customFertilisingFrequency ? { fertilisingFrequency: customFertilisingFrequency } : {}),
-            growthStage: growthStage ? growthStage : userPlant.growthStage
+            growthStage: growthStage ? growthStage : userPlant.growthStage,
+            gardenId: updatedGardenId || userPlant.gardenId
         }
 
         updateUserPlantData(updatedPlant);
@@ -83,11 +87,11 @@ export default EditPlant = () => {
     }
 
     return (
-        <View>
+        <SafeAreaWrapper>
             <TopActionButtonContainer>
-                <TopActionButton onPressAction={() => router.replace('/gardens/' + params.gardenId)} icon="arrow-left" />
+                <TopActionButton onPressAction={() => router.replace('/plants/' + params.plantId)} icon="arrow-left" />
             </TopActionButtonContainer>
-            {userPlant && <View style={{ gap: 10, padding: 20 }}>
+            {userPlant && <ScrollView style={{ gap: 10 }}>
                 <Text>{plantName}</Text>
                 <CustomTextInput
                     label="Plant Name"
@@ -131,9 +135,10 @@ export default EditPlant = () => {
                     })}
 
                 </Picker>
-                <Button buttonColor={colours.primary} textColor='white' onPress={() => onSavePlant()}>Submit</Button>
+                <Button buttonColor={colours.primary} textColor='white' onPress={() => onSavePlant()}>Save</Button>
+                <Button buttonColor='blue' textColor='white' onPress={() => setShowTransplantMenu(true)}>Transplant</Button>
                 <Button buttonColor={colours.error} textColor='white' onPress={() => setShowConfirmDelete(true)}>Delete</Button>
-            </View>
+            </ScrollView>
             }
             <Portal>
                 <Dialog visible={showConfirmDelete} onDismiss={() => setShowConfirmDelete(false)}>
@@ -146,7 +151,22 @@ export default EditPlant = () => {
                         <Button onPress={() => setShowConfirmDelete(false)}>Cancel</Button>
                     </Dialog.Actions>
                 </Dialog>
+
             </Portal>
-        </View>
+            <Portal>
+                <Dialog visible={showTransplantMenu} onDismiss={() => setShowTransplantMenu(false)}>
+
+                    <Dialog.Content>
+                        <Text variant="bodyMedium" style={{ marginBottom: 10 }}>Which area is this plant being moved to?</Text>
+                        <ScrollView>
+                            {userGardens.map((garden, index) => <TouchableOpacity style={{ marginVertical: 10 }} key={index} onPress={() => onSavePlant(garden.id)}>
+                                <Text>{garden.gardenName || gardenType[garden.gardenType].optionText}</Text>
+                            </TouchableOpacity>)}
+                        </ScrollView>
+                    </Dialog.Content>
+
+                </Dialog>
+            </Portal>
+        </SafeAreaWrapper>
     );
 }

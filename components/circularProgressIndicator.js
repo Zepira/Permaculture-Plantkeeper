@@ -71,7 +71,7 @@ export const CircularProgressIndicator = ({
 
 
     return (
-        <View style={{ width: radius * 2, height: radius * 2 }}>
+        <View style={{ width: radius * 2, height: radius * 2, zIndex: 1 }}>
             <Svg
                 height={radius * 2}
                 width={radius * 2}

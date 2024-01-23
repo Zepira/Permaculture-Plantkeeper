@@ -1,8 +1,9 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Text } from "../../theme/text";
 import { DataContext } from "../../utils/context/dataContext";
-import { SafeAreaWrapperFullWidth } from "../../components/safeAreaWrapper";
-import { Image, ImageBackground, Pressable, TouchableOpacity, View } from "react-native";
+import { SafeAreaWrapperFullWidth, SafeAreaWrapper } from "../../components/safeAreaWrapper";
+import { Image, ImageBackground, Pressable, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler"
 import { gardenType } from "../../utils/constants/constants";
 import { Avatar, Button, IconButton, Modal, Portal } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
@@ -110,7 +111,7 @@ export default PlantDetail = () => {
     );
 
     const updatePlantAction = (actionType) => {
-
+        console.log('UPDATE PLANT', actionType);
         switch (actionType) {
             case 'water':
                 updateUserPlantData({ ...userPlant, lastWateredDate: today });
@@ -254,87 +255,94 @@ export default PlantDetail = () => {
 
     return (
         <>
-            {isLoading ? <LoadingComponent /> : <>
-                {plant && <ImageBackground source={{ uri: variety ? variety.images[0] : plant.images[0] }} style={{ height: 300, resizeMode: 'cover', width: '100%' }} >
-                    <TopActionButtonContainer>
-                        <TopActionButton onPressAction={() => isUserPlant ? router.replace('/gardens/' + userPlant.gardenId) : router.replace('/plants')} icon="arrow-left" />
+            {isLoading ?
+                <LoadingComponent /> :
+                <>
 
-                        {isUserPlant && <TopActionButton onPressAction={() => router.replace('/plants/edit/' + userPlant.id)} icon="cog" />}
+                    {plant && <>
+                        <ImageBackground source={{ uri: variety ? variety.images[0] : plant.images[0] }} style={{ height: 300, resizeMode: 'cover', width: '100%' }} >
+                            <SafeAreaWrapper >
+                                <TopActionButtonContainer>
+                                    <TopActionButton onPressAction={() => isUserPlant ? router.replace('/gardens/' + userPlant.gardenId) : router.replace('/plants')} icon="arrow-left" />
 
-                    </TopActionButtonContainer>
+                                    {isUserPlant && <TopActionButton onPressAction={() => router.replace('/plants/edit/' + userPlant.id)} icon="cog" />}
+
+                                </TopActionButtonContainer>
+                            </SafeAreaWrapper>
+                        </ImageBackground>
+                        <SafeAreaWrapperFullWidth >
 
 
-                </ImageBackground>
-                }
-                {plant &&
-                    <SafeAreaWrapperFullWidth >
-                        <ScrollView style={{ paddingHorizontal: 20 }}>
-                            {plant.plantName && <>
 
-                                <Text style={{ color: 'black' }}>{plant.plantName}</Text>
-                                <Text style={{ color: 'black' }}>{plant.scientificName}</Text>
-                                <Text style={{ color: 'black' }}>{plant.plantName}</Text>
-                                {/* Totally great icons and stuff */}
-                                {isUserPlant && <>
-                                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+
+                            <ScrollView style={{ paddingHorizontal: 20 }}>
+                                {plant.plantName && <>
+
+                                    <Text style={{ color: 'black' }}>{plant.plantName}</Text>
+                                    <Text style={{ color: 'black' }}>{plant.scientificName}</Text>
+                                    <Text style={{ color: 'black' }}>{plant.plantName}</Text>
+                                    {/* Totally great icons and stuff */}
+                                    {isUserPlant && <>
+                                        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <PlantDetailIcon displayText='Days to Sprout' value={plant.daysToSprout - daysSincePlanted} />
                                 <PlantDetailIcon displayText='Days to Transplant' value={(6 * 7) - daysSincePlanted} />
                                 <PlantDetailIcon displayText='Mature in' value={plant.sproutToHarvest + plant.daysToSprout - daysSincePlanted} />
                             </View> */}
-                                    {isUserPlant &&
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <TouchableOpacity onPress={() => updatePlantAction('water')}>
-                                                <CircularProgressIndicator percentage={daysToWaterIn} max={waterFrequency} />
-                                                <Text>{daysToWaterIn > 0 ? `Water in ${daysToWaterIn} days` : `Water now`}</Text>
-                                            </TouchableOpacity>
+                                        {isUserPlant &&
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                <Pressable onPress={() => updatePlantAction('water')} style={{ backgroundColor: 'red', zIndex: 999999 }}>
+                                                    <CircularProgressIndicator percentage={daysToWaterIn} max={waterFrequency} />
+                                                    <Text>{daysToWaterIn > 0 ? `Water in ${daysToWaterIn} days` : `Water now`}</Text>
+                                                </Pressable>
 
-                                            <TouchableOpacity onPress={() => updatePlantAction('fertilise')}>
-                                                <CircularProgressIndicator percentage={daysToFertiliseIn} max={fertilisingFrequency} />
-                                                <Text>{daysToFertiliseIn > 0 ? `Fertilise in ${daysToFertiliseIn} days` : `Fertilise now`}</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={() => updatePlantAction('weed')}>
-                                                <CircularProgressIndicator percentage={daysToWeedIn} max={weedingFrequency} />
-                                                <Text>{daysToWeedIn > 0 ? `Weed in ${daysToWeedIn} days` : `Weed now`}</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    }
-                                </>}
+                                                <TouchableOpacity onPress={() => updatePlantAction('fertilise')}>
+                                                    <CircularProgressIndicator percentage={daysToFertiliseIn} max={fertilisingFrequency} />
+                                                    <Text>{daysToFertiliseIn > 0 ? `Fertilise in ${daysToFertiliseIn} days` : `Fertilise now`}</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() => updatePlantAction('weed')}>
+                                                    <CircularProgressIndicator percentage={daysToWeedIn} max={weedingFrequency} />
+                                                    <Text>{daysToWeedIn > 0 ? `Weed in ${daysToWeedIn} days` : `Weed now`}</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        }
+                                    </>}
 
-                                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <PlantDetailIcon iconType='annual' />
                             <PlantDetailIcon iconType='flower' />
                             <PlantDetailIcon iconType='water0' displayText='Water' />
                         </View> */}
 
 
-                                {isUserPlant && <View style={{ justifyContent: 'center', flexDirection: 'row', marginTop: 10 }}>
-                                    <CircularProgressIndicator percentage={daysSincePlanted > daysTillNextPlantStage ? daysTillNextPlantStage : daysSincePlanted} max={daysTillNextPlantStage} radius={100} icon={growthStageIcon} />
-                                </View>
-                                }
-                                <PlantingCalendar plantSowingDates={plant.sowingDates} />
+                                    {isUserPlant && <View style={{ justifyContent: 'center', flexDirection: 'row', marginTop: 10 }}>
+                                        <CircularProgressIndicator percentage={daysSincePlanted > daysTillNextPlantStage ? daysTillNextPlantStage : daysSincePlanted} max={daysTillNextPlantStage} radius={100} icon={growthStageIcon} />
+                                    </View>
+                                    }
+                                    <PlantingCalendar plantSowingDates={plant.sowingDates} />
 
 
-                                {!isUserPlant && <>
-                                    <Button onPress={() => router.push({ pathname: '/form', params: { formType: 'addPlant', id: plant.id } })}>Add to Garden</Button>
-                                    <IconButton
-                                        icon={isFavourite ? "heart" : "heart-outline"}
-                                        color={colours.primary}
-                                        size={20}
-                                        onPress={() => updateFavourites()}
-                                    />
+                                    {!isUserPlant && <>
+                                        <Button onPress={() => router.push({ pathname: '/form', params: { formType: 'addPlant', id: plant.id } })}>Add to Garden</Button>
+                                        <IconButton
+                                            icon={isFavourite ? "heart" : "heart-outline"}
+                                            color={colours.primary}
+                                            size={20}
+                                            onPress={() => updateFavourites()}
+                                        />
+                                    </>}
                                 </>}
-                            </>}
-                            <View
-                                style={{
+                                <View
+                                    style={{
 
-                                    height: 100,
-                                }}
-                            />
-                        </ScrollView>
-                    </SafeAreaWrapperFullWidth >
-
-                }
-            </>}
+                                        height: 100,
+                                    }}
+                                />
+                            </ScrollView>
+                        </SafeAreaWrapperFullWidth >
+                    </>
+                    }
+                </>}
         </>
     )
 }

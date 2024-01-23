@@ -12,4 +12,4 @@ export const TopActionButton = ({ onPressAction, icon }) => {
         </TouchableRipple>);
 }
 
-export const TopActionButtonContainer = ({ children }) => <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 20, marginTop: StatusBar.currentHeight }}>{children}</View>
+export const TopActionButtonContainer = ({ children }) => <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>{children}</View>
