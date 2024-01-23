@@ -1,18 +1,17 @@
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 
 const screenOptions = () => {
+  return {
+    //tabBarShowLabel: false,
 
-    return {
-        //tabBarShowLabel: false,
+    headerShown: false, //set on individual pages if required
+    tabBarStyle: { height: 90 },
 
-        headerShown: false, //set on individual pages if required
-        tabBarStyle: { height: 90 },
-
-        tabBarActiveTintColor: 'black',
-        tabBarInactiveTintColor: 'grey'
-    }
-}
+    tabBarActiveTintColor: "black",
+    tabBarInactiveTintColor: "grey",
+  };
+};
 
 export default PlantsLayout = () => {
-    return (<Stack screenOptions={screenOptions} />);
+  return <Stack screenOptions={screenOptions} />;
 };
