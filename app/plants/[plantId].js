@@ -387,7 +387,6 @@ export default PlantDetail = () => {
                               <Pressable
                                 onPress={() => updatePlantAction("water")}
                                 style={{
-                                  backgroundColor: "red",
                                   zIndex: 999999,
                                 }}
                               >
