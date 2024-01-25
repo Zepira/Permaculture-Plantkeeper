@@ -23,8 +23,13 @@ export default PlantDetail = () => {
   const params = useLocalSearchParams();
   console.log(params);
 
-  const { plants, userPlants, updateUserFavourite, user, updateUserPlantData } =
-    useContext(DataContext);
+  const {
+    plants,
+    userPlants,
+    updateUserFavourite,
+    userData,
+    updateUserPlantData,
+  } = useContext(DataContext);
 
   const [plant, setPlant] = useState(null);
   const [userPlant, setUserPlant] = useState(null);
@@ -150,7 +155,11 @@ export default PlantDetail = () => {
           setPlant(plant);
           setIsUserPlant(false);
           setVariety(null);
-          setIsFavourite(user.plantFavourites.includes(params.plantId));
+          setIsFavourite(
+            userData?.plantFavourites
+              ? userData.plantFavourites.includes(params.plantId)
+              : false,
+          );
           setIsLoading(false);
         }
       } else {

@@ -1,15 +1,34 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import {
+  useFonts as useQuicksand,
+  Quicksand_300Light,
+  Quicksand_400Regular,
+  Quicksand_500Medium,
+  Quicksand_600SemiBold,
+  Quicksand_700Bold,
+} from "@expo-google-fonts/quicksand";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { Slot, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { Tabs } from "expo-router/tabs";
 import { StatusBar } from "expo-status-bar";
 import { initializeApp } from "firebase/app";
-import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import {
+  initializeAuth,
+  signInWithPopup,
+  getReactNativePersistence,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signOut,
+  createUserWithEmailAndPassword,
+  getAuth,
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import React, { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { StyleSheet, Text, View } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 
+import { AuthenticationComponent } from "../components/authentication/authentication";
 import { AddNewButton } from "../components/buttons/addNewButton";
 import { LoadingComponent } from "../components/loadingComponent";
 import { paperTheme } from "../theme";
@@ -28,9 +47,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-});
+const auth = getAuth(app);
+// let auth;
+// console.log("ALANA app", app);
+// if (!auth) {
+//   auth = initializeAuth(app, {
+//     persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+//   });
+// }
 
 const TAB_ICON = {
   index: "home",
@@ -68,47 +92,64 @@ const screenOptions = ({ route }) => {
 // const Tab = createBottomTabNavigator();
 
 export default function Layout() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, loading, error] = useAuthState(auth);
+
+  const [quicksandLoaded] = useQuicksand({
+    Quicksand_300Light,
+    Quicksand_400Regular,
+    Quicksand_500Medium,
+    Quicksand_600SemiBold,
+    Quicksand_700Bold,
+  });
+
+  if (!quicksandLoaded) {
+    return null;
+  }
+
   return (
     <PaperProvider theme={paperTheme}>
-      <AuthenticationContextProvider>
-        <DataContextProvider db={db} setIsLoading={setIsLoading}>
-          {isLoading && <LoadingComponent theme={paperTheme} />}
-          {/* <Stack initialRouteName="home" /> */}
-          <Tabs screenOptions={screenOptions}>
-            <Tabs.Screen
-              name="index"
-              options={{
-                // This tab will no longer show up in the tab bar.
-                href: "/",
-                title: "Home",
-              }}
-            />
-            <Tabs.Screen
-              name="gardens"
-              options={{
-                // This tab will no longer show up in the tab bar.
-                href: "/gardens",
-                title: "My Garden",
-              }}
-            />
-            <Tabs.Screen
-              name="plants"
-              options={{
-                // This tab will no longer show up in the tab bar.
-                href: "/plants",
-                title: "Plants",
-              }}
-            />
-            <Tabs.Screen
-              name="form"
-              options={{
-                // This tab will no longer show up in the tab bar.
-                href: null,
-              }}
-            />
+      <AuthenticationContextProvider auth={auth} db={db}>
+        {isLoading && <LoadingComponent theme={paperTheme} />}
+        {/* <Stack initialRouteName="home" /> */}
+        {user && (
+          <DataContextProvider db={db} user={user}>
+            <Tabs screenOptions={screenOptions}>
+              <Tabs.Screen
+                name="index"
+                options={{
+                  // This tab will no longer show up in the tab bar.
+                  href: "/",
+                  title: "Home",
+                }}
+              />
+              <Tabs.Screen
+                name="gardens"
+                options={{
+                  // This tab will no longer show up in the tab bar.
+                  href: "/gardens",
+                  title: "My Garden",
+                }}
+              />
+              <Tabs.Screen
+                name="plants"
+                options={{
+                  // This tab will no longer show up in the tab bar.
+                  href: "/plants",
+                  title: "Plants",
+                }}
+              />
+              <Tabs.Screen
+                name="form"
+                options={{
+                  // This tab will no longer show up in the tab bar.
+                  href: null,
+                }}
+              />
 
-            {/* <Tabs.Screen
+              {/* <Tabs.Screen
                             name="plants/[plantId]"
                             options={{
                                 // This tab will no longer show up in the tab bar.
@@ -116,9 +157,11 @@ export default function Layout() {
 
                             }}
                         /> */}
-          </Tabs>
-          <AddNewButton />
-        </DataContextProvider>
+            </Tabs>
+            <AddNewButton />
+          </DataContextProvider>
+        )}
+        {!user && <AuthenticationComponent />}
       </AuthenticationContextProvider>
       <StatusBar style="auto" />
     </PaperProvider>
